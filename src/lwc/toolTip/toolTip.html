@@ -1,0 +1,12 @@
+<template>
+    <lightning-card title = "toolTip">
+        <div class="slds-form-element__row slds-p-around_medium"> 
+            <legend class="slds-form-element__label"><b>Minimum Amount:&emsp;</b>
+                <span style="position:relative; top:-4px;">
+                <lightning-helptext content={toolTipText}></lightning-helptext>
+                </span>
+            </legend>
+            <lightning-formatted-number value={amount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+        </div>
+    </lightning-card>
+</template>

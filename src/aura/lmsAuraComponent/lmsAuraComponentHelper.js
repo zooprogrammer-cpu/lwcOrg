@@ -1,0 +1,6 @@
+({
+    helperMethod : function(component,message) {
+
+    }
+   
+})

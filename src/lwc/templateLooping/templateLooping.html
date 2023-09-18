@@ -1,0 +1,20 @@
+<template>
+    <!-- for:each={array} takes the array as an input -->
+    <!-- currentItem is the value of the current  element. 
+    currentItem is an alaias and can be anyname. for:item holds the currentItem.-->
+    <!-- index is the current element index in the array. for:index holds the index.  -->
+    <lightning-card title="for:each loop">
+        <div class ="slds-var-m-around_medium">
+            <template for:each ={carList} for:item="car">
+                <!-- Here is the repeatable template -->
+                <ul key={car} class="slds-has-dividers_around-space">
+                    <li class="slds-item">{car}</li>
+                    
+                </ul>
+        
+            </template>         
+        </div>
+
+    </lightning-card>
+   
+</template>

@@ -1,0 +1,5 @@
+:host {
+    --slds-c-button-brand-color-background: orange;
+    --slds-c-button-brand-color-border: orange;
+    /* Other CSS custom properties here */
+}

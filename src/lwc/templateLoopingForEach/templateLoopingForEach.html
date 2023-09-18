@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Template Looping forEach">
+        <ul class="slds-m-around_medium">
+            <template for:each ={carList} for:item ="car">
+                <a href ="#" key={car} class="list-group-item list-group-item-action">{car}</a>
+            </template>
+        </ul>
+    </lightning-card>
+    <lightning-card title="For Each with Array of Objects">
+        <ul class="slds-m-around_medium">
+            <template for:each ={programmingList} for:item ="program">
+                <a href ="#" key={program.id} class="list-group-item list-group-item-action">{program.language}</a>
+            </template>
+        </ul>
+    </lightning-card>
+</template>

@@ -1,0 +1,12 @@
+<template>
+    <lightning-card title = "Async Await">
+        <lightning-button label="Get Accounts" onclick={handleClick}></lightning-button>
+        <div style="height: 300px;">
+            <lightning-datatable
+                    key-field="id"
+                    data={data}
+                    columns={columns}>
+            </lightning-datatable>
+        </div>
+    </lightning-card>
+</template>

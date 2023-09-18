@@ -1,0 +1,27 @@
+<template>
+    <lightning-card title="Datatable styling in LWC">
+        <template if:true={tableData}>
+            <div>
+                <template if:true={showIndustry}>
+                    <lightning-datatable
+                    key-field="Id"
+                    data = {tableData}
+                    columns = {columns}
+                    hide-checkbox-column
+                    ></lightning-datatable>
+                </template>
+                <template if:false={showIndustry}>
+                    <lightning-datatable
+                    key-field="Id"
+                    data = {tableData}
+                    columns = {columnsLessIndustry}
+                    hide-checkbox-column
+                    ></lightning-datatable>
+                </template>
+            </div>
+            
+           
+        </template>
+     
+    </lightning-card>
+</template>

@@ -1,0 +1,36 @@
+<template>
+    <!-- Example of simple data -->
+    <c-p2c-alert-component
+    message="Hurray !! I got the data"
+    card-heading="Parent to Child primitive data communication"
+    number=20
+    is-valid
+    ></c-p2c-alert-component>
+
+
+    <!-- Example of data passing on action -->
+    <div class="slds-var-m-bottom_medium"></div>
+    <lightning-card title="Parent to Child on action with API Property">
+            <div class="slds-var-m-around_medium">
+                <!-- input field in parent -->
+                <lightning-input type="number" label="Enter percentage"
+                onkeyup={changeHandler}
+                value={percentage}/>
+                </lightning-input>
+     
+                <!-- progress bar in child     -->
+                <c-p2c-progress-component 
+                    progress-value={percentage} my-name={name}>        
+                </c-p2c-progress-component>
+            </div>
+    </lightning-card>
+    
+    <!-- Example of calling child method from parent -->
+    <lightning-card title="Slider">
+        <c-p2c-slider-component></c-p2c-slider-component>
+        <lightning-button variant="brand" label="Reset Slider" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+
+    </lightning-card>
+   
+
+</template>

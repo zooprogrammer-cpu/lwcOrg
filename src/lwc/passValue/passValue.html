@@ -1,0 +1,20 @@
+<template>
+    <lightning-card title="Pass Value from Parent to Child">
+        <!-- <lightning-button 
+            icon-name="utility:download"  
+            onclick={handleExportAction} 
+            alternative-text="Export Data"
+        ></lightning-button> -->
+
+        <lightning-combobox 
+            name="sortOrder" 
+            value={value}  
+            options={FilterByOptions} 
+            onchange={handleChange} 
+            style="width: 200px;margin-left:20px"
+        ></lightning-combobox>
+            Sending to Child: {value}
+        <c-pass-value-child send-value={value}></c-pass-value-child>
+    
+    </lightning-card>
+</template>

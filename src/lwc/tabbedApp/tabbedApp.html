@@ -1,0 +1,44 @@
+<template>
+    <lightning-card>
+        <div class="slds-tabs_default">
+            <ul class="slds-tabs_default__nav" role="tablist">
+              <li class="slds-tabs_default__item" title="Item One" role="presentation">
+                <a class="slds-tabs_default__link" href="#" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item" onclick={handleOpenTabOne}>Item One</a>
+              </li>
+              <li class="slds-tabs_default__item" title="Item Two" role="presentation">
+                <a class="slds-tabs_default__link" href="#" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item" onclick={handleOpenTabTwo}>Item Two</a>
+              </li>
+              <li class="slds-tabs_default__item" title="Item Three" role="presentation">
+                <a class="slds-tabs_default__link" href="#" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" id="tab-default-3__item" onclick={handleOpenTabThree}>Item Three</a>
+              </li>
+            </ul>
+            <div id="tab-default-1" 
+              class="slds-tabs_default__content slds-hide slds-show" 
+              role="tabpanel" 
+              aria-labelledby="tab-default-1__item">Item One Content
+              <br>
+              First Name: {personObject.firstName}
+              <br>
+              Last Name: {personObject.lastName}
+            </div>
+            <div id="tab-default-2" 
+              class="slds-tabs_default__content slds-hide slds-show" 
+              role="tabpanel" 
+              aria-labelledby="tab-default-2__item">Item Two Content
+              <br>
+              First Name: {personObject.firstName}
+              <br>
+              Last Name: {personObject.lastName}
+            </div>
+            <div id="tab-default-3" 
+              class="slds-tabs_default__content slds-hide slds-show" 
+              role="tabpanel" 
+              aria-labelledby="tab-default-3__item">Item Three Content
+              <br>
+              First Name : {personObject.firstName}
+              <br>
+              Last Name : {personObject.lastName}
+            </div>
+          </div>
+    </lightning-card>
+</template>

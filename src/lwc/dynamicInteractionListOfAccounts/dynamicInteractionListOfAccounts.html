@@ -1,0 +1,32 @@
+<template>
+    <lightning-card title ="dynamicInteractionListOfAccounts">
+        <div  class="slds-var-p-around_xx-small" lwc:if={accounts.data}>
+            <div class="slds-text-body_regular slds-var-p-around_xx-small">
+                Select an Account
+            </div>
+            <lightning-datatable
+            key-field="id"
+            data={accounts.data}
+            show-row-number-column
+            columns={columnsList}
+            max-row-selection="1"
+            onrowselection={handleRowSelection}
+            >
+            </lightning-datatable>
+        </div>
+        <div  class="slds-var-p-around_xx-small" lwc:elseif={accounts.error}>
+            No Data
+        </div>    
+        <button class="slds-button slds-button_brand">Submit</button> 
+        <lightning-button variant="brand"
+            label="Submit"
+            onclick={handleClick}>
+        </lightning-button>
+
+
+
+        <!-- <template lwc:elseif={contacts.error}>
+            <c-error-panel errors={contacts.error}></c-error-panel>
+        </template> -->
+    </lightning-card>
+</template>

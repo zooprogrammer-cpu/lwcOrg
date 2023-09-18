@@ -1,0 +1,28 @@
+<template>
+    <lightning-card title ="Conditional rendering!">
+        <div class ="slds-var-m-around_medium">
+            <lightning-button
+                variant="brand" 
+                label="Show Data" title="Show Data" 
+                onclick={handleClick} 
+                class="slds-m-left x-small">
+            </lightning-button>
+            <lightning-button
+                variant="brand" 
+                label="Hide Data" title="Hide Data" 
+                onclick={resetHandler} 
+                class="slds-m-around_small">
+            </lightning-button>
+
+            <!-- client requirement is to only show this text when a button is pushed -->
+            <template if:true={isVisible}>
+                <div>Welcome everyone.</div> 
+
+            </template>
+            <template if:false={isVisible}>
+                <div>Nothing to see here.</div> 
+
+            </template>
+        </div>
+    </lightning-card>
+</template>

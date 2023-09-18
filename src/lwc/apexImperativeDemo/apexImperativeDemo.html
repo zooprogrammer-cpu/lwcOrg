@@ -1,0 +1,21 @@
+<template>
+    <lightning-card title="Apex imperative demo">
+        <div class="slds-m-around_medium">
+            <lightning-button variant="brand" 
+            label="Call Account Method" 
+            onclick={handleClick}>
+            </lightning-button>
+        </div>
+        
+        <template if:true={accounts}>
+            <template for:each ={accounts} for:item="account">
+                <div class= "slds-box slds-m-bottom_xx-small" key={account.Id}>
+                    <p><strong>Name:</strong>{account.Name}</p>
+                    <p><strong>Type:</strong>{account.Type}</p>
+
+                </div>
+
+            </template>
+        </template>
+    </lightning-card>
+</template>

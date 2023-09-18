@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Refresh Apex" icon-name="custom:custom63">
+        <div class="slds-m-around_medium">
+            <template if:true ={contact.data}>
+                <lightning-datatable
+                key-field="id"
+                data={contact.data}
+                columns={columns}
+                onsave={handleSave}
+                draft-values={draftValues}>
+                </lightning-datatable>
+            </template>
+       
+        </div>
+    </lightning-card>
+</template>

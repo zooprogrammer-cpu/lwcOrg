@@ -1,0 +1,12 @@
+<template>
+    <lightning-card title="Query Selector">
+        <div class= "slds-var-p-around_small text">
+            Input Color: <input type = "text" onchange = {handleInputChange} />
+        </div>
+    </lightning-card>
+
+    <lightning-card title = "Getter Instead of Query Selector">
+        <input type="text" value={bgColor} onchange = {hadleChange} />
+        <div style = {divStyle}></div>
+    </lightning-card>
+</template>

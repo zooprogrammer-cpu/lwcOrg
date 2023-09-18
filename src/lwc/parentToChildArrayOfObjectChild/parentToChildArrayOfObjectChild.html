@@ -1,0 +1,13 @@
+<template>
+    <lightning-card title="Child Catching Object">
+        <template for:each ={userDetails} for:item="user">
+            <div class="card" key={user.name}>
+                <h1>{user.name}</h1>
+                <p class="title">{user.title}</p>
+                <p>{user.company}</p>
+                <p><button>{user.buttonText}</button></p>
+            </div>
+        </template>
+    </lightning-card>
+    
+</template>

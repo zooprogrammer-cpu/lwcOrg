@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title="Iterator Loop">
+        <ul class="slds-m-around_medium">
+            <div class="list-group-inline">
+                <template iterator:ceo={ceoList}>
+                    <div key={ceo.value.id}>
+                        <a href="#" if:true ={ceo.first} class="list-group-item list-group-item-action header"><strong>List of top companies and their CEOs</strong></a>
+
+                        <a href ="#" class="list-group-item list-group-item-action"><strong>{ceo.value.company} : </strong>{ceo.value.name}</a>
+
+                        <a href="#" if:true ={ceo.last} class="list-group-item list-group-item-action footer"><strong>2022 Ash Consulting</strong></a>
+
+                    </div>
+                </template>
+            </div>
+        </ul>
+    </lightning-card>
+</template>

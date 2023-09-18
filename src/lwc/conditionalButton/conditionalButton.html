@@ -1,0 +1,25 @@
+<template>
+    <lightning-card title="conditional Rendering with Button" icon-name="utility:hierarchy">
+        <div class="slds-card__body slds-card__body_inner"></div>
+            <div class ="slds-var-m-around_medium">
+
+                <p>
+                    <template if:true={show}>
+                        Peek-a-boo!
+                    </template> 
+                    <template if:false={show}>
+                        I'm hiding!
+                    </template>   
+                </p>
+                <p>
+                    <lightning-button 
+                    variant="brand" 
+                    label="Show me" 
+                    title="Primary action" 
+                    onclick={handleClick} 
+                    class="slds-m-left_x-small">
+                </lightning-button>
+                </p>
+            </div>   
+    </lightning-card>
+</template>

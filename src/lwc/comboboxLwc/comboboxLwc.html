@@ -1,0 +1,22 @@
+<template>
+    <lightning-card title = "Combobox">
+        <lightning-combobox
+            label ="Accounts"
+            value ={value}
+            placeholder = "Select Account"
+            options={options}
+            onchange ={handleChanged}
+        ></lightning-combobox>
+
+        <lightning-combobox
+        label ="Accounts2"
+        value ={value2}
+        placeholder = "Select Account2"
+        options={options2}
+        onchange ={handleChanged2}
+    ></lightning-combobox>
+
+        <p> Selected value is: {value} </p>
+    </lightning-card>
+    
+</template>

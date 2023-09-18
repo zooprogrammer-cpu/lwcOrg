@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title ="dynamicInteractionListOfContacts">
+        <div  class="slds-var-p-around_xx-small" lwc:if={wiredContacts.data}>
+            <div class="slds-text-body_regular slds-var-p-around_xx-small">
+                Contact data received
+            </div>
+            <div>
+                <div class="slds-text-body_regular slds-var-p-around_xx-small">
+                    Related Contacts of the selected account: <b>{accountName}</b>
+                </div>
+                <!-- sldsValidatorIgnoreNextLine -->
+                <lightning-datatable
+                    key-field="id"
+                    data={wiredContacts.data}
+                    show-row-number-column
+                    hide-checkbox-column
+                    columns={columnsList}
+                    onrowselection={handleRowSelection}
+                >
+                </lightning-datatable>
+            </div>
+        </div>
+    </lightning-card>
+</template>

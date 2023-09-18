@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage">
+            <event name="sliderclicked" label="Slider Clicked" description="Click slider to return recent records.">
+                <schema>
+                    {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "title": "Slider Value",
+                                "description": "The value of the slider."
+                            },
+                            "clicks": {
+                                "type": "integer",
+                                "title": "Slider Clicks",
+                                "description": "The number of times the slider is clicked."
+                            }
+                        }
+                    }
+                </schema>
+            </event>
+        </targetConfig>
+    </targetConfigs>
+
+</LightningComponentBundle>

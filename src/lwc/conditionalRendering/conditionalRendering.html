@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title="Conditional Rendering">
+        <div class="slds-m-around_large">
+            <lightning-button variant="brand" label="Show Data" title="Show Data" onclick={handleClick} class="slds-var-m-around_x-small"></lightning-button>
+            <template if:true={isVisible}>
+                <div>Welcome to the Matrix</div>
+            </template>
+            <template if:false={isVisible}>
+                <div>You can't see the data</div>
+            </template>
+
+            <lightning-input
+                type="text"
+                label="Type Hello to see the data"
+                onkeyup={changeHandler}
+                value={typedText}>
+            </lightning-input>
+            <template if:true={checkText}>
+                <div>Success, you have typed correctly</div>
+            </template>
+            
+        </div>
+    </lightning-card>
+</template>

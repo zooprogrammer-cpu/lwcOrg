@@ -1,0 +1,12 @@
+<template>
+    <div>What is Your name?</div>
+    <!-- named slots -->
+    <div><slot name="first"></slot></div> 
+
+    <div>What is your age?</div>
+    <div><slot name="second"></slot></div>
+
+    <footer class="slds-card__footer slds-hide">
+        <slot name="footer" onslotchange={handleFooterChange}></slot>
+    </footer>
+    </template>

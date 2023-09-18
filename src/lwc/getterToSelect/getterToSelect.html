@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="Getter to Select">
+        <div class= "slds-var-p-around_small text">
+            <lightning-input label="Name" value={textValue} onchange={handleTextChange} placeholder="Placeholder text…"></lightning-input>
+        </div>
+        <div>
+            <lightning-button label="Display" onclick={handleDisplayText} class="slds-var-m-left_x-small"></lightning-button>    
+      
+            <lightning-button variant="destructive" label="Destructive" onclick={handleClickClear} class="slds-var-m-left_x-small"></lightning-button>
+        </div>
+        <div class="slds-var-p-around_medium">
+            <p>{displayText}</p>
+        </div>
+    </lightning-card>
+</template>

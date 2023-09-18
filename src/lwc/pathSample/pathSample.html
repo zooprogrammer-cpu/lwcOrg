@@ -1,0 +1,44 @@
+<template>
+  <div>
+    <div class="slds-card">
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-path">
+                <div class="slds-grid slds-path__track">
+                    <div class="slds-grid slds-path__scroller-container">
+                        <div class="slds-path__scroller" role="application">
+                            <div class="slds-path__scroller_inner">
+                                <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                                    <template for:each={stageNames} for:item="stage">
+                                            <li class={stage.className}  role="presentation" key={stage.dataId} onclick={handleClick} data-id={stage.dataId}  data-identifier="pathstage">
+                                                <a aria-selected="false" class="slds-path__link" href="#" role="option" tabindex="-1">
+                                                    <span class="slds-path__stage">{stage.label} 
+                                                    </span>
+                                                    <span class="slds-path__title">{stage.label}</span>
+                                                </a>
+                                            </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div>
+    <lightning-card title = "toolTip">
+      <div style="padding-left:2rem;padding-top:5rem;position:relative">
+          <button class="slds-button slds-button_icon slds-button slds-button_icon" aria-describedby="help" aria-disabled="true" title="Help">
+              <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/_slds/icons/utility-sprite/svg/symbols.svg#info"></use>
+              </svg>
+              <span class="slds-assistive-text">Help</span>
+          </button>
+          <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left helpButton" role="tooltip" id="help" title="helpIcon" style="position:absolute;top:-4px;left:15px;opacity:0">
+              <div class="slds-popover__body" title="toolTipButton">Sit nulla est ex deserunt exercitation anim occaecat. Nostrud ullamco deserunt aute id consequat veniam incididunt duis in sint irure nisi.</div>
+          </div>
+      </div>
+  </lightning-card>
+  </div>
+</template>

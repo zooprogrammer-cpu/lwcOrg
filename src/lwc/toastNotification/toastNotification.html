@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Toast Notification Demo">
+        <div class="slds-m-around_medium">
+
+            <button class="slds-button slds-button_brand" onclick={toastHandler} >Submit</button>
+
+            <button class="slds-button slds-button_brand" onclick={toastHandlerError} >Error</button>
+        </div>
+        <div class="slds-m-around_medium">
+
+            <button class="slds-button slds-button_brand" onclick={toastHandlerWarn} >Warning</button>
+
+            <button class="slds-button slds-button_brand" onclick={toastHandlerInfo} >Info</button>
+        </div>
+    </lightning-card>
+</template>

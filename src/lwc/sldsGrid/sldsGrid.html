@@ -1,20 +1,224 @@
 <template>
-    <lightning-card title="SLDS Grid"> 
-      <div class="slds-text-heading_large slds-border_bottom slds-text-align_center">Quote Summary</div>
-     
-      <div class="slds-grid slds-wrap slds-grid_align-center">
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small slds-small-size_12-of-12 slds-medium-size_8-of-12 slds-large-size_4-of-12" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small slds-small-size_12-of-12 slds-medium-size_8-of-12 slds-large-size_4-of-12" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small slds-small-size_12-of-12 slds-medium-size_8-of-12 slds-large-size_4-of-12" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small slds-small-size_12-of-12 slds-medium-size_8-of-12 slds-large-size_4-of-12" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small slds-small-size_12-of-12 slds-medium-size_8-of-12 slds-large-size_4-of-12" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small" style="height: 8rem; background: palegreen">First Item</div>
-          <div class ="slds-col slds-var-m-around_xx-small slds-var-p-around_small" style="height: 8rem; background: palegreen">First Item</div>
-      </div>
+    <lightning-card title="SLDS Grid">
+        <div class="slds-container_large slds-container_center">
+            <div class="slds-grid_vertical">
+                <ul class=" slds-col
+                            slds-list_horizontal
+                            slds-has-block-links_space
+                            slds-text-title_caps
+                            slds-border_bottom
+                            slds-m-bottom_medium
+                ">
+                    <li>
+                        <a href="#">Home</a>
+                    </li>
+                    <li>
+                        <a href="#">About us</a>
+                    </li>
+                    <li>
+                        <a href="#">Where are we?</a>
+                    </li>
+                </ul>
+                <div class="slds-col slds-is-relative">
+                    <img src={waveImage} alt="Big Ocean Wave" height="400px"/>
+                    <div class="slds-is-absolute" style="top:150px;left:50px;color:yellow; width:300px;font-size:2rem">
+                        Big Wave, Inc.
+                        <p class="slds-text-heading_small slds-m-top_x-small">One stop shop for everything Salesforce</p>
+
+                    </div>
+                </div>
+                <div class="slds-col slds-is-relative">
+                    <div class="slds-m-vertical_medium slds-text-align_center">
+                        <h1 style="font-size: 2rem ">Who are we?</h1>
+                    </div>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-p-around_medium slds-large-size_3-of-12 slds-medium-size_6-of-12 slds-small-size_12-of-12">
+                            <article class="slds-card">
+                                <div class="slds-grid slds-einstein-header slds-card__header">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                                            <div class="slds-media__figure">
+                                                <span class="slds-icon_container slds-icon-utility-salesforce1">
+                                                <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+                                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#salesforce1"></use>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <h2 class="slds-truncate" title="Einstein (10+)">
+                                                    <a href="#" class="slds-card__header-link" title="Einstein (10+)">
+                                                        <span class="slds-text-heading_small">Product 1</span>
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="slds-einstein-header__figure slds-size_1-of-4 slds-medium-size_1-of-3"></div>
+                                    </header>
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner slds-line-clamp_medium">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </article>
+                        </div>
+                        <div class="slds-col slds-p-around_medium slds-large-size_3-of-12 slds-medium-size_6-of-12 slds-small-size_12-of-12">
+                            <article class="slds-card">
+                                <div class="slds-grid slds-einstein-header slds-card__header">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                                            <div class="slds-media__figure">
+                                                <span class="slds-icon_container slds-icon-utility-salesforce1">
+                                                <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+                                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#salesforce1"></use>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <h2 class="slds-truncate" title="Einstein (10+)">
+                                                    <a href="#" class="slds-card__header-link" title="Einstein (10+)">
+                                                        <span class="slds-text-heading_small">Product 1</span>
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="slds-einstein-header__figure slds-size_1-of-4 slds-medium-size_1-of-3"></div>
+                                    </header>
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner slds-line-clamp_medium">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </article>
+                        </div>
+                        <div class="slds-col slds-p-around_medium slds-large-size_3-of-12 slds-medium-size_6-of-12 slds-small-size_12-of-12">
+                            <article class="slds-card">
+                                <div class="slds-grid slds-einstein-header slds-card__header">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                                            <div class="slds-media__figure">
+                                                <span class="slds-icon_container slds-icon-utility-salesforce1">
+                                                <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+                                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#salesforce1"></use>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <h2 class="slds-truncate" title="Einstein (10+)">
+                                                    <a href="#" class="slds-card__header-link" title="Einstein (10+)">
+                                                        <span class="slds-text-heading_small">Product 1</span>
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="slds-einstein-header__figure slds-size_1-of-4 slds-medium-size_1-of-3"></div>
+                                    </header>
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner slds-line-clamp_medium">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </article>
+                        </div>
+                        <div class="slds-col slds-p-around_medium slds-large-size_3-of-12 slds-medium-size_6-of-12 slds-small-size_12-of-12">
+                            <article class="slds-card">
+                                <div class="slds-grid slds-einstein-header slds-card__header">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                                            <div class="slds-media__figure">
+                                                <span class="slds-icon_container slds-icon-utility-salesforce1">
+                                                <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+                                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#salesforce1"></use>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <h2 class="slds-truncate" title="Einstein (10+)">
+                                                    <a href="#" class="slds-card__header-link" title="Einstein (10+)">
+                                                        <span class="slds-text-heading_small">Product 1</span>
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="slds-einstein-header__figure slds-size_1-of-4 slds-medium-size_1-of-3"></div>
+                                    </header>
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner slds-line-clamp_medium">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </article>
+                        </div>
+                        <div class="slds-col slds-p-around_medium slds-large-size_3-of-12 slds-medium-size_6-of-12 slds-small-size_12-of-12">
+                            <article class="slds-card">
+                                <div class="slds-grid slds-einstein-header slds-card__header">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                                            <div class="slds-media__figure">
+                                                <span class="slds-icon_container slds-icon-utility-salesforce1">
+                                                <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+                                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#salesforce1"></use>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <h2 class="slds-truncate" title="Einstein (10+)">
+                                                    <a href="#" class="slds-card__header-link" title="Einstein (10+)">
+                                                        <span class="slds-text-heading_small">Product 1</span>
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="slds-einstein-header__figure slds-size_1-of-4 slds-medium-size_1-of-3"></div>
+                                    </header>
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner slds-line-clamp_medium">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </article>
+                        </div>
+                        <div class="slds-col slds-p-around_medium slds-large-size_3-of-12 slds-medium-size_6-of-12 slds-small-size_12-of-12">
+                            <article class="slds-card">
+                                <div class="slds-grid slds-einstein-header slds-card__header">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                                            <div class="slds-media__figure">
+                                                <span class="slds-icon_container slds-icon-utility-salesforce1">
+                                                <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+                                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#salesforce1"></use>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <h2 class="slds-truncate" title="Einstein (10+)">
+                                                    <a href="#" class="slds-card__header-link" title="Einstein (10+)">
+                                                        <span class="slds-text-heading_small">Product 1</span>
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="slds-einstein-header__figure slds-size_1-of-4 slds-medium-size_1-of-3"></div>
+                                    </header>
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner slds-line-clamp_medium">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-is-relative">
+                    <div class="slds-m-vertical_medium slds-text-align_center">
+                        <h1 style="font-size: 2rem ">Where are we?</h1>
+                        <div class="slds-map_container">
+                            <div class="slds-map">
+                                <iframe id="GoogleMapID" title="Google Maps iframe" src="https://sfdc-map.surge.sh/"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </lightning-card>
   </template>

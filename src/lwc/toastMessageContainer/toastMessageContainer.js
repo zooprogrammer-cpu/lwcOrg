@@ -1,52 +1,43 @@
 import { LightningElement } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent'
 import ToastContainer from 'lightning/toastContainer';
-import Toast from 'lightning/toast';
 
 export default class ToastMessageContainer extends LightningElement {
     connectedCallback() {
         const toastContainer = ToastContainer.instance();
-        toastContainer.maxShown = 4;
+        toastContainer.maxShown = 3;
         toastContainer.toastPosition = 'top-right';
     }
-    showError() {
-        Toast.show(
-            {
-                label: 'Sample Toast Title at {0}',
-                labelLinks: [
-                    {
-                        url: 'https://www.trailhead.com',
-                        label: 'Trailhead'
-                    }
-                ],
-                message:
-                    'If you want to learn, {0}. Can also go here {1} for new updates.',
-                messageLinks: [
-                    {
-                        url: 'https://www.youtube.com/',
-                        label: 'YouTube'
-                    },
-                    {
-                        url: 'https://www.google.com',
-                        label: 'Google, Inc.'
-                    }
-                ],
-                mode: 'sticky',
-                variant: 'error',
-                onclose: () => {
-                    console.log('###Toast Close');
-                }
-            },
-            this
-        );
+  showError() {
+        const evt = new ShowToastEvent({
+            title: 'Salesforce Toast',
+            message: 'Salesforce LWC Stack Example',
+            variant: 'error'
+        });
+        this.dispatchEvent(evt);
     }
     showWarning() {
-        //Show Warning Toast
+        const evt = new ShowToastEvent({
+            title: 'Salesforce Toast',
+            message: 'Salesforce LWC Stack Example',
+            variant: 'warning'
+        });
+        this.dispatchEvent(evt);
     }
     showSuccess() {
-        //Show Success Toast
-
+        const evt = new ShowToastEvent({
+            title: 'Salesforce Toast',
+            message: 'Salesforce LWC Stack Example',
+            variant: 'success'
+        });
+        this.dispatchEvent(evt);
     }
     showInfo() {
-        //Show Info Toast
+        const evt = new ShowToastEvent({
+            title: 'Salesforce Toast',
+            message: 'Salesforce LWC Stack Example',
+            variant: 'info'
+        });
+        this.dispatchEvent(evt);
     }
 }

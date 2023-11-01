@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title= "Update Email Address and Refresh Standard">
+        <!-- <lightning-modal-header label={header}></lightning-modal-header> -->
+        <lightning-modal-header label={headerText}></lightning-modal-header>
+        <lightning-modal-body>
+            <div class="slds-grid slds-wrap slds-p-around_small">
+                <div class="slds-col slds-m-around_xx-small slds-size_12-of-12">
+                    Please enter the email address and click Save to proceed.
+                </div>
+                <div class="slds-col slds-m-around_xx-small slds-size_6-of-12">
+                    <lightning-input type="email" label="Email" pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" message-when-pattern-mismatch="Please enter a valid email address" onchange={handleEmailChange}></lightning-input>
+                </div>
+            </div>
+        </lightning-modal-body>
+        <lightning-modal-footer>
+            <button class="slds-button slds-button_neutral" onclick={handleCancel} aria-label="Cancel and close">Cancel</button>
+            <button class="slds-button slds-button_brand" onclick={handleSave} disabled={disableSave}>Save</button>
+        </lightning-modal-footer>
+        <template lwc:if={showSpinner}>
+            <lightning-spinner alternative-text="Loading..." size="small">
+            </lightning-spinner>
+        </template>
+    </lightning-card>
+</template>

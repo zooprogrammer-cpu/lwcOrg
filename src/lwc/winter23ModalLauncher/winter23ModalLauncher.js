@@ -12,6 +12,6 @@ export default class Winter23ModalLauncher extends LightningElement {
             content: 'Passed into content api',
             headerText : 'I am a dynamic header'
         });
-        console.log(result);
+        console.log(this.result);
     }    
 }

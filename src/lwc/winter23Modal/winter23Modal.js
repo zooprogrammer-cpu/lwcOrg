@@ -8,10 +8,18 @@ export default class Winter23Modal extends LightningModal {
     // If no value is returned in the close method, then undefined is returned(Same as closing with the X button).
     handleOkay() {
         // this.disableClose = true; // use this to disable close
-        this.close('okay');
+        let object = {
+            age: 23,
+            name: {
+                firstName: 'Ash',
+                lastName: 'Basnyat'
+            }
+        }
+        this.close(object);
     }
 
     handleCancel(){
+
         this.close('Not okay. Closing!'); // this gets sent to result in the parent component
     }
 }

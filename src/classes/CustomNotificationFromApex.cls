@@ -20,10 +20,10 @@ public without sharing class CustomNotificationFromApex {
         notification.setTargetId(targetId);
 
         // Set the URL for the notification
-        String recordUrl = Url.getOrgDomainUrl().toExternalForm() + '/' + targetId;
+//        String recordUrl = Url.getOrgDomainUrl().toExternalForm() + '/' + targetId;
 
         // Include the URL in the body of the notification
-        notification.setBody('Click here to view the record: ' + recordUrl);
+        notification.setBody('Click here to view the record: ' + targetId);
 
         // Actually send the notification
         try {

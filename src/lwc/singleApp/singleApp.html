@@ -1,7 +1,45 @@
 <template>
   <lightning-card>
     <div class="slds-grid slds-grid_align-center" >
-      <div class="slds-var-p-horizontal_small slds-grid slds-wrap"> 
+      <div class="slds-var-p-horizontal_small slds-grid slds-wrap">
+        <div class="slds-col slds-size_1-of-1">
+          <div class="slds-box">
+            <lightning-layout multiple-rows >
+
+              <lightning-layout-item size="3" flexibility="auto" padding="horizontal-small" class="slds-text-align_left">
+                <lightning-combobox
+                        data-id = "Broker"
+                        name="Broker"
+                        label="Broker"
+                        value={Broker}
+                        options={groupOptions}
+                        onchange={takeFilter}
+                        variant="label-hidden">
+                </lightning-combobox>
+              </lightning-layout-item>
+
+
+              <lightning-layout-item size="9" flexibility="auto" padding="horizontal-small" class="slds-text-align_right">
+                <div class="slds-button-group" role="group">
+                  <button class="slds-button slds-button_neutral">Return to Quote Detail</button>
+                  <button class="slds-button slds-button_neutral">Refresh</button>
+                  <button class="slds-button slds-button_neutral">Edit</button>
+                  <button class="slds-button slds-button_neutral">Save</button>
+                  <div class="slds-dropdown-trigger slds-dropdown-trigger_click slds-button_last">
+                    <button class="slds-button slds-button_icon slds-button_icon-border-filled" aria-haspopup="true" aria-expanded="false" title="Show More">
+                      <svg class="slds-button__icon" aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#down"></use>
+                      </svg>
+                      <span class="slds-assistive-text">Show More</span>
+                    </button>
+                  </div>
+                </div>
+              </lightning-layout-item>
+            </lightning-layout>
+          </div>
+        </div>
+
+
         <div class="slds-col slds-size_1-of-1">
           <div class="slds-box">
             <div class="slds-text-heading_large">Quote Summary</div>

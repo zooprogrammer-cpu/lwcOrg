@@ -1,5 +1,5 @@
 import { LightningElement, wire } from 'lwc';
-import queryAccountsByEmployeeNumber from '@salesforce/apex/AccountListControllerLwc.queryAccountsByRevenue';
+import queryAccountsByRevenue from '@salesforce/apex/AccountListControllerLwc.queryAccountsByRevenue';
 
 export default class AccountFinder extends LightningElement {
 
@@ -12,6 +12,6 @@ export default class AccountFinder extends LightningElement {
     this.annualRevenue = null;
   }
 
-  @wire(queryAccountsByRevenue, { annualRevenue: 'annualRevenue' })
+  @wire(queryAccountsByRevenue, { annualRevenue: '$annualRevenue' })
   accounts;
 }

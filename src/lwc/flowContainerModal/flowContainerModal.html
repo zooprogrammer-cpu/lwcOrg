@@ -1,0 +1,28 @@
+<template>
+    <lightning-modal-header label={headerText}></lightning-modal-header>
+    <lightning-modal-body>
+
+        <div class="slds-m-around_medium">
+            <lightning-card title="Initiate Order" icon-name="standard:orders">
+                <div class="slds-m-around_medium">
+                    <template if:true={isPartner}>
+                        <lightning-flow onstatuschange={handleStatusChange} flow-api-name="partnerFlow" flow-input-variables={inputVariables}></lightning-flow>
+                    </template>
+                    <template if:true={isCustomer}>
+                        <lightning-flow onstatuschange={handleStatusChange} flow-api-name="customerFlow" flow-input-variables={inputVariables}></lightning-flow>
+                    </template>
+                </div>
+            </lightning-card>
+        </div>
+
+
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label="Ok" onclick={handleOkay}></lightning-button>
+        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+    </lightning-modal-footer>
+
+
+
+
+</template>

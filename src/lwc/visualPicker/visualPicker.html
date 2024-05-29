@@ -1,0 +1,98 @@
+<template>
+    <template if:true={showModal}>
+        <section
+                role="dialog"
+                tabindex="-1"
+                aria-labelledby="modal-heading-01"
+                aria-modal="true"
+                aria-describedby="modal-content-id-1"
+                class="slds-modal slds-fade-in-open"
+        >
+            <div class="slds-modal__container">
+                <!-- Header Start -->
+                <header class="slds-modal__header">
+                    <lightning-button-icon
+                            class="slds-modal__close"
+                            title="Close"
+                            icon-name="utility:close"
+                            icon-class="slds-button_icon-inverse"
+                            onclick={closeModal}
+                    ></lightning-button-icon>
+
+                    <h2 id="id-of-modalheader-h2" class="slds-text-heading_large">
+                        Select Accounts
+                    </h2>
+                    <p class="slds-var-m-top_x-small">Select data from the list</p>
+                </header>
+                <!-- Header End -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <template if:true={showSpinner}>
+                        <lightning-spinner
+                                alternative-text="Loading"
+                                variant="brand"
+                                size="medium"
+                        ></lightning-spinner>
+                    </template>
+                    <div>
+                        <fieldset class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <template for:each={accounts} for:item="acc">
+                                    <div key={acc.Id} class="slds-visual-picker slds-visual-picker_medium">
+                                        <input
+                                                type="checkbox"
+                                                onchange={handleCheck}
+                                                name={acc.Id}
+                                                id={acc.Id}
+                                                value={acc.Id}
+                                        ></input>
+                                        <label for={acc.Id}>
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                              <span>
+                                                <span class="slds-text-heading_large">{acc.Name}</span>
+                                                <span class="slds-text-title"></span>
+                                              </span>
+                                            </span>
+                                            <span class="slds-visual-picker__body">
+                                              <span class="slds-text-heading_small">Contact number</span>
+                                              <span class="slds-text-title">{acc.Phone}</span>
+                                            </span>
+                                            <span class="slds-icon_container slds-visual-picker__text-check">
+                                                <lightning-icon icon-name="utility:check"
+                                                                size="xx-small"
+                                                                variant="inverse"
+                                                >
+                                                </lightning-icon>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </template>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <template if:true={message}>
+                        <span class="slds-text-color_error">{message}</span>
+                    </template>
+                    <lightning-button
+                            variant="brand-outline"
+                            label="Cancel"
+                            onclick={closeModal}
+                            title="Cancel"
+                            class="slds-var-m-left_x-small"
+                    ></lightning-button>
+                    <lightning-button
+                            variant="brand"
+                            label="Next"
+                            onclick={applyActions}
+                            title="Next"
+                            class="slds-var-m-left_x-small"
+                    ></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

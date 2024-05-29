@@ -7,6 +7,7 @@
           <option name="connectionName" value="lwcOrg" />
           <option name="connectionType" value="MDAPI" />
           <option name="defaultModuleName" value="lwcOrg" />
+          <option name="offlineSymbolTablePath" value="$PROJECT_DIR$/IlluminatedCloud/lwcOrg/OfflineSymbolTable.zip" />
         </IlluminatedCloudConnection>
       </list>
     </option>

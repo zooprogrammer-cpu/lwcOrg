@@ -23,7 +23,7 @@ export default class LdsDeleteRecord extends LightningElement {
 
 
     /** Wired Apex result so it can be refreshed programmatically */
-    //wiredContactsResult;
+    wiredContactsResult;
 
     // pass the recordId to Apex Controller
     @wire(getAccountRecordWithRelatedContactList, { recordId: '$recordId' })

@@ -5,7 +5,7 @@ export default class RefsDemo extends LightningElement {
     const ageVal = this.refs.ageRef.value;
     console.log(nameVal);
     console.log(ageVal);
-
+    
     this.refs.responseRef.innerHTML = `Submitted Name is : ${nameVal} and Age is : ${ageVal}`;
 
   }

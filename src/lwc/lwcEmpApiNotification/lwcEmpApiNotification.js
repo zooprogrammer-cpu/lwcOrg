@@ -65,7 +65,8 @@ export default class LwcEmpApiNotification extends LightningElement {
         const evt = new ShowToastEvent({
             title: title,
             message: message,
-            variant: variant
+            variant: variant,
+            mode: "sticky"
         })
         this.dispatchEvent(evt)
     }

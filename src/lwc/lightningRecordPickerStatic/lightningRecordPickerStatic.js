@@ -17,6 +17,7 @@ export default class LightningRecordPickerStatic extends LightningElement {
 
     }
 
+    // Can add filter so that only Accounts with Game shows up on results
     filter = {
         criteria: [
             {
@@ -27,7 +28,7 @@ export default class LightningRecordPickerStatic extends LightningElement {
         ]
     };
 
-
+    // By default, only name is being matched. So customizing above to match text or text formula field such as Title
     handleChange(event) {
         console.log('event', event);
         this.selectedRecordId =event.detail.recordId;

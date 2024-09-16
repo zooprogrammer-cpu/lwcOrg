@@ -1,5 +1,3 @@
-
-
 import {LightningElement, wire} from 'lwc';
 import {IsConsoleNavigation, getFocusedTabInfo, setTabLabel} from "lightning/platformWorkspaceApi";
 

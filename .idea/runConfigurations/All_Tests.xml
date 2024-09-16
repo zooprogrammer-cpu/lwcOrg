@@ -4,10 +4,12 @@
     <option name="allowRunningInParallel" value="false" />
     <option name="apexLogLevel" value="DEBUG" />
     <option name="calloutsLogLevel" value="INFO" />
+    <option name="changedOnly" value="false" />
     <option name="connectionName" value="lwcOrg" />
-    <option name="connectionType" value="MDAPI" />
+    <option name="connectionType" value="OAUTH" />
     <option name="contextConfiguration" value="false" />
     <option name="databaseLogLevel" value="INFO" />
+    <option name="dependencyUniqueFullName" />
     <option name="directoryPath" />
     <option name="logLevelsInitialized" value="true" />
     <option name="moduleToTestClassNames">

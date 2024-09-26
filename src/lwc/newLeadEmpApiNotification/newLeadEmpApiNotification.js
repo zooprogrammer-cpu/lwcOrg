@@ -16,16 +16,17 @@ export default class NewLeadEmpApiNotification extends LightningElement {
 
 
     connectedCallback() {
-        const self = this;
-        const toastCallback = function (response){
+
+        const toastCallback = (response) => {
             console.log('response data:', JSON.parse(JSON.stringify(response)));
             console.log('message received: ', response.data.payload.message__c);
             console.log('leadRecordId: ', response.data.payload.leadRecordId__c);
             console.log('ownerId: ', response.data.payload.ownerId__c);
-            self.message = response.data.payload.message__c;
-            console.log('self.message: ', self.message);
-            if (self.message){
-                self.showToast("Success",self.message,"success")
+            console.log('currentUserId: ', this.currentUserId);
+            this.message = response.data.payload.message__c;
+            console.log('self.message: ', this.message);
+            if (this.message && this.currentUserId === response.data.payload.ownerId__c) {
+                this.showToast("Success", this.message, "success");
             }
         }
 

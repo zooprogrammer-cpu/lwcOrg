@@ -4,11 +4,21 @@
 
 public with sharing class OmniChannelPresenceService {
     public static List<User> getAvailableAgents() {
-        List<ServicePresenceStatus> availableForLeadsStatus = [SELECT Id, MasterLabel FROM ServicePresenceStatus WHERE MasterLabel = 'Available for Leads'];
+//        List<ServicePresenceStatus> statusList = [SELECT Id, MasterLabel FROM ServicePresenceStatus WHERE MasterLabel = 'Available for Leads'];
+        Id availableStatusId = [SELECT Id, MasterLabel FROM ServicePresenceStatus WHERE MasterLabel = 'Available for Leads' LIMIT 1].Id;
+        System.debug(availableStatusId);
 
-        List<User> availableUsers = [SELECT UserId FROM UserServicePresence WHERE ServicePresenceStatusId = :availableForLeadsStatus[0].Id];
+        List<UserServicePresence> availableUsers = [SELECT UserId FROM UserServicePresence WHERE ServicePresenceStatusId =:availableStatusId ];
+        System.debug(availableUsers);
 
-//        List<User> availUserList = [SELECT Id, Name, Email FROM User WHERE Id IN: availableUsers];
+        List<String> availableUsersList = new List<String>();
+
+        for (UserServicePresence usp: availableUsers) {
+            availableUsersList.add(usp.UserId);
+        }
+
+        List<User> availableAgents = [SELECT Id, Name, Email FROM User WHERE Id IN:availableUsersList];
+        System.debug('availableAgents: ' + availableAgents);
 
         return null;
 

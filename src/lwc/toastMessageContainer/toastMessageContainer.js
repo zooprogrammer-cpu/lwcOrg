@@ -8,32 +8,34 @@ export default class ToastMessageContainer extends LightningElement {
         toastContainer.maxShown = 3;
         toastContainer.toastPosition = 'top-right';
     }
-showError() {
-    Toast.show({
-        label : 'Sample Toast Title at {0}',
-        labelLinks : [
-            {
-                url: 'https://www.google.com',
-                label:  'Google'
+
+    showError() {
+        Toast.show({
+            label : 'Sample Toast Title at {0}',
+            labelLinks : [
+                {
+                    url: 'https://www.google.com',
+                    label:  'Google'
+                }
+            ],
+            message : 'Visit us at {0}. Follow the {1} for new updates ',
+            messageLinks: [{
+                url: 'https://www.youtube.com',
+                label: 'YouTube'
+            },
+                {
+                    url: 'https://www.notion.com',
+                    label: 'Blog'
+                }
+            ],
+            mode: 'sticky',
+            variant: 'error',
+            onclose: ()=>{
+                console.log('###Toast Close');
             }
-        ],
-        message : 'Visit us at {0}. Follow the {1} for new updates ',
-        messageLinks: [{
-            url: 'https://www.youtube.com',
-            label: 'YouTube'
-        },
-            {
-                url: 'https://www.notion.com',
-                label: 'Blog'
-            }
-        ],
-        mode: 'sticky',
-        variant: 'error',
-        onclose: ()=>{
-            console.log('###Toast Close');
-        }
-    }, this);
-}
+        }, this);
+    }
+
 showWarning() {
     const evt = new ShowToastEvent({
         title: 'Salesforce Toast',

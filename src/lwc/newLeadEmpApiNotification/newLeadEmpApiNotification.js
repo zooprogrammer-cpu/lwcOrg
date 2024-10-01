@@ -4,18 +4,24 @@
 
 import { LightningElement, api, track } from 'lwc';
 import { subscribe, unsubscribe, onError, setDebugFlag, isEmpEnabled } from 'lightning/empApi';
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
+// import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import ToastContainer from 'lightning/toastContainer';
+import Toast from 'lightning/toast';
 import userId from '@salesforce/user/Id';
 export default class NewLeadEmpApiNotification extends LightningElement {
 
     @track message ='';
-    @track toastMessage;
+    recordUrl;
     @api recordId;
     channelName = '/event/newLeadEmpApiEvent__e';
     currentUserId = userId;
 
 
     connectedCallback() {
+        const toastContainer = ToastContainer.instance();
+        toastContainer.maxShown = 3;
+        toastContainer.toastPosition = 'top-right';
+
 
         const toastCallback = (response) => {
             console.log('response data:', JSON.parse(JSON.stringify(response)));
@@ -23,10 +29,12 @@ export default class NewLeadEmpApiNotification extends LightningElement {
             console.log('leadRecordId: ', response.data.payload.leadRecordId__c);
             console.log('ownerId: ', response.data.payload.ownerId__c);
             console.log('currentUserId: ', this.currentUserId);
+            console.log('recordUrl: ', response.data.payload.recordUrl__c);
             this.message = response.data.payload.message__c;
+            this.recordUrl = response.data.payload.recordUrl__c;
             console.log('self.message: ', this.message);
             if (this.message && this.currentUserId === response.data.payload.ownerId__c) {
-                this.showToast("Success", this.message, "success");
+                this.showNewToast( this.message, this.recordUrl );
             }
         }
 
@@ -56,15 +64,33 @@ export default class NewLeadEmpApiNotification extends LightningElement {
         });
     }
 
-    showToast(title,message,variant){
-        const evt = new ShowToastEvent({
-            title: title,
-            message: message,
-            variant: variant,
-            mode: "sticky"
-        })
-        this.dispatchEvent(evt)
+    showNewToast(toastMessage, recordUrl) {
+        Toast.show({
+            label : toastMessage,
+            message : 'Click here to open the Inquiry:  {0}. ',
+            messageLinks: [{
+                url: recordUrl,
+                label: 'Inquiry'
+            },
+            ],
+            mode: 'sticky',
+            variant: 'success',
+            onclose: ()=>{
+                console.log('###Toast Close');
+            }
+        }, this);
     }
+
+    // showToast(title,message,variant){
+    //     const evt = new ShowToastEvent({
+    //         title: title,
+    //         message: message,
+    //         variant: variant,
+    //         mode: "sticky"
+    //     })
+    //     this.dispatchEvent(evt)
+    // }
+
 
     disconnectedCallback() {
         unsubscribe(this.subscription, response => {
@@ -72,8 +98,5 @@ export default class NewLeadEmpApiNotification extends LightningElement {
             console.log(response);
         });
     }
-
-
-
 
 }

@@ -67,10 +67,10 @@ export default class NewLeadEmpApiNotification extends LightningElement {
     showNewToast(toastMessage, recordUrl) {
         Toast.show({
             label : toastMessage,
-            message : 'Click here to open the Inquiry:  {0}. ',
+            message : 'Click {0} to open the Inquiry ',
             messageLinks: [{
                 url: recordUrl,
-                label: 'Inquiry'
+                label: 'here'
             },
             ],
             mode: 'sticky',

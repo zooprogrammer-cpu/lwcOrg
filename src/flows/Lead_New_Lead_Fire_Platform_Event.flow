@@ -1,9 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Get_record_URL</name>
+        <label>Get record URL</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <actionName>GetOrgBaseUrl</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Get_Service_Presence_Status_for_Available_for_Leads</targetReference>
+        </connector>
+        <dataTypeMappings>
+            <typeName>T__sourceRecords</typeName>
+            <typeValue>Lead</typeValue>
+        </dataTypeMappings>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>sourceRecords</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>GetOrgBaseUrl</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
     <apiVersion>61.0</apiVersion>
+    <assignments>
+        <name>collect_availableUsersList</name>
+        <label>collect availableUsersList</label>
+        <locationX>176</locationX>
+        <locationY>755</locationY>
+        <assignmentItems>
+            <assignToReference>availableUsersList</assignToReference>
+            <operator>Add</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_available_users_list</targetReference>
+        </connector>
+    </assignments>
     <environments>Default</environments>
     <interviewLabel>Lead - New Lead Fire Platform Event {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Lead - New Lead Fire Platform Event</label>
+    <loops>
+        <name>loop_over_available_users</name>
+        <label>loop over available users</label>
+        <locationX>176</locationX>
+        <locationY>971</locationY>
+        <collectionReference>Get_Available_User_Service_Presence</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Fire_Platform_Event</targetReference>
+        </nextValueConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -26,8 +75,11 @@
     <recordCreates>
         <name>Fire_Platform_Event</name>
         <label>Fire Platform Event</label>
-        <locationX>176</locationX>
-        <locationY>323</locationY>
+        <locationX>264</locationX>
+        <locationY>1079</locationY>
+        <connector>
+            <targetReference>loop_over_available_users</targetReference>
+        </connector>
         <inputAssignments>
             <field>leadRecordId__c</field>
             <value>
@@ -37,23 +89,117 @@
         <inputAssignments>
             <field>message__c</field>
             <value>
-                <stringValue>New lead is assigned to you</stringValue>
+                <stringValue>New lead is available : {!Get_Lead.Name}</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>ownerId__c</field>
             <value>
-                <elementReference>$Record.Owner:User.Id</elementReference>
+                <elementReference>loop_over_available_users.User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>recordUrl__c</field>
+            <value>
+                <elementReference>Get_record_URL.sfdcRecordURL</elementReference>
             </value>
         </inputAssignments>
         <object>newLeadEmpApiEvent__e</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordLookups>
+        <name>Get_Available_User_Service_Presence</name>
+        <label>Get Available User Service Presence</label>
+        <locationX>176</locationX>
+        <locationY>647</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>collect_availableUsersList</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ServicePresenceStatusId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Service_Presence_Status_for_Available_for_Leads.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>StatusEndDate</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>UserServicePresence</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_available_users_list</name>
+        <label>Get available users list</label>
+        <locationX>176</locationX>
+        <locationY>863</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>loop_over_available_users</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>In</operator>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Lead</name>
+        <label>Get Lead</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_record_URL</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Service_Presence_Status_for_Available_for_Leads</name>
+        <label>Get Service Presence Status for Available for Leads</label>
+        <locationX>176</locationX>
+        <locationY>539</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Available_User_Service_Presence</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>MasterLabel</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Available for Leads</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>ServicePresenceStatus</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Fire_Platform_Event</targetReference>
+            <targetReference>Get_Lead</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -68,4 +214,11 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>availableUsersList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>

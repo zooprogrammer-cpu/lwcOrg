@@ -6,5 +6,12 @@
 <template>
     <lightning-card title="Toast Example">
         <lightning-button label="Show Toast with Link" onclick={showToastWithLink}></lightning-button>
+        <div class="slds-form-element">
+            <label class="slds-form-element__label slds-text-title_bold"
+                   for="text-input-weight">Weight(kg)</label>
+            <div class="slds-form-element__control">
+                <input type="number" id="text-input-weight" placeholder="Enter your weight in kg" required="" class="slds-input" />
+            </div>
+        </div>
     </lightning-card>
 </template>

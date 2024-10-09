@@ -6,6 +6,7 @@
     --light-white:#fafafa;
     --light-blue:#357ebd;
     --light-pink: #e91e63;
+    --dull-blue: #1d1e33;
     --dull-grey: #444;
     --size-16:16px;
     --size-14:14px;
@@ -48,3 +49,23 @@ h2{
     font-size:var(--size-14);
 
 }
+
+label{
+    font-size: 26px;
+    color: var(--light-white);
+}
+
+input {
+    color: var(--dull-blue);
+    padding: 8px;
+    font-size: var(--size-16);
+}
+
+.custom-button {
+    font-size: var(--size-16);
+    padding:  var(--size-12);
+    background: var(--light-pink);
+    color: var(--light-white);
+    border-color: var(--light-pink);
+}
+

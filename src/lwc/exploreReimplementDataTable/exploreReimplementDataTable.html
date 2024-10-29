@@ -1,0 +1,35 @@
+<template>
+    <label>Select the fields you want to display in the Data Table</label>
+    <select class="slds-select" name="optionSelect" multiple>
+        <template for:each={wiredContactFields.data} for:item="field">
+            <option key={field} value={field}>{field}</option>
+        </template>
+    </select>
+
+    <lightning-button
+            label="Looks Fine"
+            onclick={handleSelectedFields}
+    ></lightning-button>
+
+    <lightning-datatable
+            key-field="id"
+            data={fetchedContacts}
+            columns={columns}
+    >
+    </lightning-datatable>
+
+    <!-- It's not possible to disabled individual checkboxes in
+        <lightning-checkbox-group> </lightning-checkbox-group> conditionality. -->
+
+    <lightning-checkbox-group
+            name="Checkbox Group"
+            label="Checkbox Group"
+            options={options}
+            value={value}
+            onchange={handleChange}
+    ></lightning-checkbox-group>
+
+    <!-- Use <lightning-input type="checkbox"></lightning-input> instead,
+    you will have complete control! -->
+    <lightning-input type="checkbox" checked disabled></lightning-input>
+</template>

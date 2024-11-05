@@ -1,101 +1,142 @@
 <!--
- - Created by ashbas on 10/20/24.
+ - Created by ashbas on 10/21/24.
  -->
 
 <!-- Quote Line Generator -->
 <template>
-    <lightning-card title="Add Quote Lines">
-        <div>
-            <div slot="body">
-                <div class="slds-scrollable_y" style="height:100%;">
-<!--                    <template if:true={loading}>-->
-<!--                        <div style="height:300px">-->
-<!--                            <lightning-spinner alternative-text="Loading"></lightning-spinner>-->
-<!--                        </div>-->
-<!--                    </template>-->
-                    <template if:false={loading}>
-                        <template if:false={showTable}>
-                            <div class="slds-align_absolute-center">
-                                <lightning-formatted-text value="No associated simple sell bundles found. "></lightning-formatted-text>
-                                <lightning-button variant="base" label="Add Products" title="Add More Products" onclick={handleShowTable} class="slds-m-left_x-small"></lightning-button>
-                            </div>
-                        </template>
-                        <template if:true={showTable}>
-                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right">
-                                <thead>
-                                <tr>
-                                    <th class="" scope="col">
-                                        <div class="slds-truncate" title="#">#</div>
-                                    </th>
-                                    <th class="" scope="col">
-                                        <div class="slds-truncate" title="Product Name">
-                                            Product Name
-                                        </div>
-                                    </th>
-                                    <th class="" scope="col">
-                                        <div class="slds-truncate" title="Product Quantity">
-                                            Product Quantity
-                                        </div>
-                                    </th>
-                                    <th class="" scope="col">
-                                        <div class="slds-truncate" title="Delete">Delete</div>
-                                    </th>
-                                    <th class="" scope="col">
-                                        <div class="slds-truncate" title="Add">Add</div>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <template for:each={rows} for:item="row" if:false={loading}>
-                                    <tr class="slds-hint-parent" key={row.index}>
-                                        <th data-label="Name" scope="row">
-                                            <div class="slds-truncate" title={row.index}>
-                                                {row.index}
-                                            </div>
-                                        </th>
-                                        <td data-label="Some Custom Column">
-                                            <lightning-combobox
-                                                    data-row={row.index}
-                                                    name="Industry"
-                                                    label="Industry"
-                                                    value={row.pName}
-                                                    options={nameOptions}
-                                                    onchange={handleChangeProduct}
-                                                    variant="label-hidden">
-                                            </lightning-combobox>
-                                        </td>
-                                        <td data-label="Some Custom Column">
-                                            <lightning-combobox
-                                                    data-row={row.index}
-                                                    name="Industry"
-                                                    label="Industry"
-                                                    value={row.pQuantity}
-                                                    options={quantityOptions}
-                                                    onchange={handleChangeQuantity}
-                                                    variant="label-hidden">
-                                            </lightning-combobox>
-                                        </td>
-                                        <td data-label="Some Custom Column">
-                                            <lightning-button variant="base" label="Delete" title="Looks like a link" onclick={handleDeleteRow}
-                                                              data-row={row.index}  class="slds-m-left_x-small"></lightning-button>
-                                        </td>
-                                        <td data-label="Some Custom Column">
-                                            <lightning-button variant="base" label="Add More Products" title="Looks like a link" onclick={handleAddRow} class="slds-m-left_x-small"></lightning-button>
-                                        </td>
-                                    </tr>
+    <lightning-card>
+        <h1 class="slds-text-heading_large slds-text-align_center slds-text-title_bold">Add Products</h1>
+        <div class="slds-form-element__control slds-grid slds-wrap slds-m-around_small">
+            <div class="slds-col slds-m-around_xx-small slds-size_3-of-12">
+                <lightning-record-picker
+                        lwc:ref="recordPicker"
+                        object-api-name="Product2"
+                        placeholder="Search..."
+                        label="Select a record"
+                        variant=label-hidden
+                        matching-info={matchingInfo}
+                        display-info={displayInfo}
+                        onchange={handleChange}
+                ></lightning-record-picker>
+            </div>
+            <div class="slds-col slds-m-around_xx-small slds-size_3-of-12">
+                <lightning-input
+                        label="Enter Quantity"
+                        placeholder= "Enter Quantity"
+                        variant="label-hidden"
+                        value={quantity}
+                        type="number"
+                        min="1"
+                        onchange={qtyHandler}>
+                    ></lightning-input>
+            </div>
+            <div class="slds-col slds-m-around_xx-small slds-size_3-of-12">
+                <lightning-input
+                        label="Price"
+                        variant="label-hidden"
+                        value={itemPrice}
+                        type="number"
+                        formatter="currency"
+                        read-only="true"
+                        min="1"
+                ></lightning-input>
+            </div>
+            <div class="slds-col slds-m-around_xx-small slds-size_2-of-12">
+                <lightning-button
+                        label="Add Product"
+                        variant = "brand"
+                        onclick={handleAddProduct}
+                        disabled={disableAddProduct}
+                ></lightning-button>
+            </div>
+        </div>
+
+
+        <div class="slds-p-around_medium slds-m-top_medium">
+            <template lwc:if={preparedQuoteLines.length}>
+                <template for:each={preparedQuoteLines} for:item="ql">
+                    <div class="slds-box slds-grid" key={ql.Id}>
+                        <div class="slds-col slds-m-around_xx-small slds-size_8-of-12">
+                            <div class="slds-wrap">
+                                <template for:each={ql.fields} for:item="field">
+                                    <div key={field.label}>
+                                        <h2 class="slds-text-heading_small">
+                                            {field.label} :
+                                            <template lwc:if = {field.isCurrency}>
+                                                <lightning-formatted-number value= {field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                            </template>
+                                            <template lwc:else>
+                                                {field.value}
+                                            </template>
+                                        </h2>
+                                    </div>
                                 </template>
-                                </tbody>
-                            </table>
-                            <lightning-textarea name="input1" label="Notes" value={notes} onchange={handleChangeNotes}>
-                            </lightning-textarea>
-                        </template>
-                    </template>
-                </div>
-            </div>
-            <div slot="footer" class="slds-align_absolute-center">
-                <lightning-button class="slds-var-p-around_small" variant="neutral" label="Cancel" onclick={handleNegative}></lightning-button>
-                <lightning-button class="slds-var-p-around_small" variant="Brand" label="Save" onclick={handlePositive} disabled={disableSave}></lightning-button>
-            </div>
+                            </div>
+                            <template lwc:if={ql.children.length}>
+                                <div class="slds-wrap">
+                                    <lightning-accordion allow-multiple-sections-open active-section-name="children items">
+                                        <lightning-accordion-section name="children" label="More Details">
+                                            <template for:each={ql.children} for:item="child">
+                                                <div key={child.Id}>
+                                                    <ul class="slds-p-horizontal_medium slds-list_dotted">
+                                                        <li>
+                                                            <template for:each={child.fields} for:item="field">
+                                                                <div key={field.label}>
+                                                                    <h3 class="slds-text-heading_small">
+                                                                        {field.label} :
+                                                                        <template lwc:if = {field.isCurrency}>
+                                                                            <lightning-formatted-number value= {field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                                        </template>
+                                                                        <template lwc:else>
+                                                                            {field.value}
+                                                                        </template>
+                                                                    </h3>
+                                                                </div>
+                                                            </template>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </template>
+                                        </lightning-accordion-section>
+                                    </lightning-accordion>
+                                </div>
+                            </template>
+                        </div>
+
+                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+                            <lightning-button
+                                    data-id={ql.Id}
+                                    onclick={handleClickEdit}
+                                    label="Edit">
+                            </lightning-button>
+                        </div>
+                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+                            <lightning-button
+                                    data-id={ql.Id}
+                                    onclick={deleteQuoteLineItem}
+                                    label="Delete"
+                                    variant=destructive-text
+                            >
+                            </lightning-button>
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <template if:false={quoteLineGroupingArray}>
+                <p> No Quote Lines found for this quote</p>
+            </template>
+        </div>
+        <div slot="footer">
+            <lightning-button label="Close" variant="brand" onclick={closeQuickAction}></lightning-button>
+        </div>
+        <div class="slds-m-around_medium">
+            <template if:true={showModal}>
+                <c-quote-line-insert-child
+                        record-id={recordId}
+                        quote-line-grouping-from-parent={quoteLineItemObject}
+                        onclose={closeHandler}>
+                </c-quote-line-insert-child>
+            </template>
         </div>
     </lightning-card>
 </template>

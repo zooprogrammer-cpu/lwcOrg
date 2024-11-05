@@ -44,6 +44,7 @@ export default class ExploreReimplementDataTable extends LightningElement {
     }
 
     handleFetchFieldTypes() {
+        console.log('this.selected:' , JSON.stringify(this.selected));
         getFieldTypes({ selectedFields: this.selected })
             .then(result => {
                 this.columns = this.selected.map(field => {

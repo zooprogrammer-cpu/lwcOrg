@@ -1,0 +1,31 @@
+<!--
+ - Created by ashbas on 10/21/24.
+ -->
+
+<!-- Quote Line Creator -->
+<template>
+    <lightning-card title="Add Quote Lines" >
+        <div class="slds-m-around_medium">
+            <template if:true={quoteLineItems}>
+                <lightning-datatable
+                key-field="id"
+                data={quoteLineItems}
+                columns ={columns}
+                hide-checkbox-column=true
+                onrowaction={handleRowAction}>
+                </lightning-datatable>
+            </template>
+            <template if:false={quoteLineItems}>
+                <p> No Quote Lines found for this quote</p>
+            </template>
+        </div>
+        <div>
+            <lightning-button
+                    label="Add Product"
+                    variant = "brand"
+                    onclick={handleAddProduct}
+            ></lightning-button>
+        </div>
+
+    </lightning-card>
+</template>

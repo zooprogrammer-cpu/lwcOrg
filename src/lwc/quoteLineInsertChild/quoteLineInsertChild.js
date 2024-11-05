@@ -1,35 +1,34 @@
 /**
- * Created by ashbas on 10/21/24.
+ * Created by ashbas on 10/23/24.
  */
 
-import {LightningElement, api, wire, track} from 'lwc';
-import { CloseActionScreenEvent } from 'lightning/actions';
+import {LightningElement, api, track, wire} from 'lwc';
 import {ShowToastEvent} from "lightning/platformShowToastEvent";
-import getQuoteLineItems from "@salesforce/apex/QuoteLineController.getQuoteLineItems";
+import {refreshApex} from "@salesforce/apex";
+import {RefreshEvent} from "lightning/refresh";
 import deleteQuoteLineItems from "@salesforce/apex/QuoteLineController.deleteQuoteLineItem";
 import insertQuoteLineItem from "@salesforce/apex/QuoteLineController.insertQuoteLineItem";
 import getNewQuoteLineItem from "@salesforce/apex/QuoteLineController.getNewQuoteLineItem";
+import getQuoteLineItems from "@salesforce/apex/QuoteLineController.getQuoteLineItems";
 import getFieldTypes from "@salesforce/apex/QuoteLineController.getFieldTypes";
 import getCustomMetadata from "@salesforce/apex/CustomMetadataService.getCustomMetadata";
 import {startQuoteLineOrganization} from "c/quoteLineService";
 import {customizeObjectKeys} from "c/quoteLineService";
-import {RefreshEvent} from "lightning/refresh";
-import {refreshApex} from "@salesforce/apex";
 
-export default class QuoteLineGenerator extends LightningElement {
+export default class QuoteLineInsertChild extends LightningElement {
+  @api parentQuoteLineId;
   @api recordId;
   @track isLoading = false;
-  @track quoteLineGroupingArray = [];
-  showModal = false;
   wiredResult;
-  selectedProduct2Id = '';
-  selectedParentQuoteLineId;
+  selectedRecordId = '';
   disableAddProduct = true;
   itemPrice;
-  quoteLineItemObject;
-  @track fetchedQuoteLineItemFields;
+  @api quoteLineGroupingFromParent;
+  currentQuoteLineGroup;
+  currentQuoteLine;
   @track allFieldTypes;
-  fieldLabelMap;
+
+  activeSections = ['children'];
 
   matchingInfo = {
     primaryField: {fieldPath:"Name"},
@@ -40,27 +39,13 @@ export default class QuoteLineGenerator extends LightningElement {
     additionalFields: ["ProductCode"]
   }
 
-
-  async handleChange(event) {
-    // console.log('event', event);
-    this.selectedProduct2Id =event.detail.recordId;
-    // console.log("---this.selectedProduct2Id : ", this.selectedProduct2Id );
-
-    if (this.selectedProduct2Id) {
-      this.disableAddProduct = false;
-      const result = await getNewQuoteLineItem({productId: this.selectedProduct2Id});
-      this.itemPrice = result.UnitPrice;
-    }
-  }
-
   @wire(getQuoteLineItems, {quoteId: '$recordId'})
   async handleList(wiredResult) {
     this.wiredResult = wiredResult;
     let quoteLines = [];
     this.quoteLineGroupingArray = [];
     if (wiredResult.data) {
-      console.log('wiredResult.data: ', wiredResult.data);
-      wiredResult.data.forEach((ql)=>{
+      wiredResult.data.forEach((ql) => {
         // console.log('each quote line: ', ql);
         let customizedQuoteLine = customizeObjectKeys(ql);
         quoteLines.push(customizedQuoteLine);
@@ -68,10 +53,26 @@ export default class QuoteLineGenerator extends LightningElement {
       // console.log('quoteLines::', JSON.stringify(quoteLines));
       this.allFieldTypes = await this.getAllFieldTypes(wiredResult.data);
       this.fieldLabelMap = await this.getAllFieldLabels(wiredResult.data);
-      console.log('this.fieldLabelMap: ', JSON.stringify(this.fieldLabelMap));
     }
-    this.quoteLineGroupingArray = startQuoteLineOrganization(quoteLines);
-    // console.log('allFieldTypes::', JSON.stringify(this.allFieldTypes));
+    if (this.quoteLineGroupingFromParent) {
+      this.currentQuoteLine = this.quoteLineGroupingFromParent.qlRecordId;
+      let quoteLineGroupingArray = startQuoteLineOrganization(quoteLines);
+      this.currentQuoteLineGroup = [quoteLineGroupingArray.find(arr => arr.Id === this.currentQuoteLine)];
+      this.activeSections = ['children'];
+    }
+  }
+
+  async handleChange(event) {
+    // console.log('event', event);
+    this.selectedRecordId =event.detail.recordId;
+    // console.log("---this.selectedRecordId : ", this.selectedRecordId );
+
+    if (this.selectedRecordId) {
+      this.disableAddProduct = false;
+      const result = await getNewQuoteLineItem({productId: this.selectedRecordId});
+      this.itemPrice = result.UnitPrice;
+      // console.log('The price is: ', this.itemPrice);
+    }
   }
 
   showToast(title, message, variant) {
@@ -79,44 +80,14 @@ export default class QuoteLineGenerator extends LightningElement {
     this.dispatchEvent(event);
   }
 
-  deleteQuoteLineItem(event) {
-    const qlRecordId = event.target.dataset.id;
-    // console.log('qlRecordId in deleteQuoteLineItem: ', qlRecordId);
-    this.handleDeleteProduct(qlRecordId);
-  }
-
-  async handleDeleteProduct(quoteLineItemId) {
-    try {
-      this.isLoading = true;
-      await deleteQuoteLineItems({quoteLineItemId : quoteLineItemId})
-      this.showToast('Success', 'Product removed successfully', 'success');
-      console.log('Product removed successfully');
-      this.fetchUpdatedQuoteLineItems();
-      this.isLoading = false;
-    }
-    catch (error) {
-      this.showToast('Error', 'Error removing product', 'error');
-      console.error('Error in removing product', error);
-      this.isLoading = false;
-    }
-  }
-
-  openChildModal(quoteId, parentQuoteLineId) {
-    this.selectedParentQuoteLineId = parentQuoteLineId;
-    this.showModal = true;
-  }
-
-  closeHandler() {
-    this.showModal = false;
-  }
-
   async handleAddProduct() {
     this.isLoading = true;
     try {
       await insertQuoteLineItem({
         quoteId: this.recordId,
-        productId : this.selectedProduct2Id,
-        quantity: this.quantity
+        productId : this.selectedRecordId,
+        quantity: this.quantity,
+        parentQuoteLineId : this.currentQuoteLine
       });
       this.showToast('Success', 'Product added successfully', 'success');
       this.fetchUpdatedQuoteLineItems();
@@ -141,6 +112,23 @@ export default class QuoteLineGenerator extends LightningElement {
     this.dispatchEvent(new RefreshEvent());
   }
 
+  async handleDeleteProduct(event) {
+    const qlRecordId = event.target.dataset.id;
+    try {
+      this.isLoading = true;
+      await deleteQuoteLineItems({quoteLineItemId: qlRecordId})
+      this.showToast('Success', 'Product removed successfully', 'success');
+      console.log('Product removed successfully ');
+      this.fetchUpdatedQuoteLineItems();
+      this.isLoading = false;
+    }
+    catch (error) {
+      this.showToast('Error', 'Error removing product', 'error');
+      console.error('Error in removing product', error);
+      this.isLoading = false;
+    }
+  }
+
   qtyHandler(event){
     this.quantity = event.target.value;
   }
@@ -157,14 +145,9 @@ export default class QuoteLineGenerator extends LightningElement {
     this.showToast('Error', errorMessage, 'error');
   }
 
-  async handleClickEdit(event) {
-    const qlRecordId = event.target.dataset.id;
-    this.quoteLineItemObject = {
-      recordId: this.recordId,
-      qlRecordId : qlRecordId,
-      quoteLineGroupingArray : this.quoteLineGroupingArray
-    }
-    this.openChildModal(this.recordId, qlRecordId);
+  closeHandler(){
+    const myEvent = new CustomEvent('close')
+    this.dispatchEvent(myEvent)
   }
 
   getFields(quoteLine) {
@@ -190,17 +173,19 @@ export default class QuoteLineGenerator extends LightningElement {
   }
 
   get preparedQuoteLines() {
-    return this.quoteLineGroupingArray.map(ql => {
-      return {
-        ...ql,
-        fields: this.getFields(ql),
-        children: ql.children
-            .map(child => ({
-              ...child,
-              fields: this.getFields(child)
-            }))
-      };
-    });
+    if (this.currentQuoteLineGroup) {
+      return this.currentQuoteLineGroup.map(ql => {
+        return {
+          ...ql,
+          fields: this.getFields(ql),
+          children: ql.children
+              .map(child => ({
+                ...child,
+                fields: this.getFields(child)
+              }))
+        };
+      });
+    }
   }
 
   getMatchingFieldType(fieldName) {
@@ -213,6 +198,7 @@ export default class QuoteLineGenerator extends LightningElement {
   async  getAllFieldTypes(quoteLines) {
     if (quoteLines) {
       let selected =[];
+
       const filteredQuoteLines = quoteLines.map(ql => {
         return Object.keys(ql).reduce((acc, key) => {
           if (key !== 'Product2Id' && key !== 'Product2') {
@@ -244,10 +230,5 @@ export default class QuoteLineGenerator extends LightningElement {
 
       return fieldLabelMap;
     }
-  }
-
-  closeQuickAction() {
-    this.dispatchEvent(new CloseActionScreenEvent());
-
   }
 }

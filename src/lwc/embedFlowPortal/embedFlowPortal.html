@@ -1,0 +1,13 @@
+<template>
+    <lightning-card title="Flow in Lightning" icon-name="standard:orders">
+        <div class="slds-m-around_medium">
+            <template if:true={isPartner}>
+                <lightning-flow onstatuschange={handleStatusChange} flow-api-name="partnerFlow" flow-input-variables={inputVariables}></lightning-flow>
+            </template>
+            <template if:true={isCustomer}>
+                <lightning-flow onstatuschange={handleStatusChange} flow-api-name="customerFlow" flow-input-variables={inputVariables}></lightning-flow>
+            </template>
+        </div>
+    </lightning-card>
+
+</template>

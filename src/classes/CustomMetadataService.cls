@@ -56,6 +56,37 @@
         return supportTier; 
     }
 
+     @AuraEnabled(Cacheable=true)
+     public static List<SObject> getCustomMetadata( String customMetaDataName, String customMetaDataRecordDevName) {
+         Set<String> tempFields = new Set<String>();
+         String queryFields = ' ';
+         String query = 'SELECT ';
+
+         Map<String,Schema.SObjectType> globalDesc = Schema.getGlobalDescribe();
+         Schema.SObjectType sobjType = globalDesc.get(customMetaDataName);
+         Schema.DescribeSObjectResult describeResult = sobjType.getDescribe();
+         Map<String,Schema.SObjectField> fieldsMap = describeResult.fields.getMap();
+         tempFields = fieldsMap.keySet();
+
+         for(Integer i = 0; i < tempFields.size(); i++){
+             if(i == tempFields.size() - 1){
+                 queryFields +=  (new List<String>(tempFields))[i] + ' ';
+             }else{
+                 queryFields +=  (new List<String>(tempFields))[i] + ', ';
+             }
+         }
+
+         if(customMetaDataRecordDevName == '' || customMetaDataRecordDevName == null){
+             query += queryFields + ' FROM ' + customMetaDataName;
+         }else{
+             query += queryFields + ' FROM ' + customMetaDataName + ' WHERE DeveloperName =: customMetaDataRecordDevName';
+         }
+
+         List<SObject> customMetadataQuery = Database.query(query);
+         System.debug('customMetadataQuery: ' + customMetadataQuery);
+         return customMetadataQuery;
+     }
+
 
     
 }

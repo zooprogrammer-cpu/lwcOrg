@@ -1,5 +1,5 @@
 <template>
-    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
         <div class="slds-modal__container">
             <header class="slds-modal__header">
                 <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit Quote Line</h2>
@@ -26,38 +26,40 @@
                                         </template>
                                     </div>
                                     <template lwc:if={ql.children.length}>
-                                        <div class="slds-wrap">
+                                        <div>
                                             <lightning-accordion
                                                     allow-multiple-sections-open
                                                     active-section-name={activeSections}>
                                                 <lightning-accordion-section name="children" label="More Details">
                                                     <template for:each={ql.children} for:item="child">
                                                         <div key={child.Id}>
-                                                            <ul class="slds-p-horizontal_medium slds-list_dotted">
-                                                                <li>
-                                                                    <template for:each={child.fields} for:item="field">
-                                                                        <div key={field.label}>
-                                                                            <h3 class="slds-text-heading_small">
-                                                                                {field.label} :
-                                                                                <template lwc:if = {field.isCurrency}>
-                                                                                    <lightning-formatted-number value= {field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
-                                                                                </template>
-                                                                                <template lwc:else>
-                                                                                    {field.value}
-                                                                                </template>
-                                                                            </h3>
-                                                                        </div>
-                                                                    </template>
-                                                                </li>
-                                                            </ul>
-                                                            <div class="slds-col slds-p-around_medium slds-size_1-of-12">
-                                                                <lightning-button
-                                                                        data-id={child.Id}
-                                                                        onclick={handleDeleteProduct}
-                                                                        label="Delete"
-                                                                        variant=destructive-text
-                                                                >
-                                                                </lightning-button>
+                                                            <div class="slds-grid slds-p-around_x-small">
+                                                                <ul class="slds-col slds-p-horizontal_medium slds-list_dotted slds-size_10-of-12">
+                                                                    <li>
+                                                                        <template for:each={child.fields} for:item="field">
+                                                                            <div key={field.label}>
+                                                                                <h3 class="slds-text-heading_small">
+                                                                                    {field.label} :
+                                                                                    <template lwc:if = {field.isCurrency}>
+                                                                                        <lightning-formatted-number value= {field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                                                    </template>
+                                                                                    <template lwc:else>
+                                                                                        {field.value}
+                                                                                    </template>
+                                                                                </h3>
+                                                                            </div>
+                                                                        </template>
+                                                                    </li>
+                                                                </ul>
+                                                                <div class="slds-col slds-p-around_medium slds-size_1-of-12">
+                                                                    <lightning-button
+                                                                            data-id={child.Id}
+                                                                            onclick={handleDeleteProduct}
+                                                                            label="Delete"
+                                                                            variant=destructive-text
+                                                                    >
+                                                                    </lightning-button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </template>
@@ -73,9 +75,9 @@
                         <p> No Quote Lines found for this quote</p>
                     </template>
                 </div>
-                <div class="slds-p-horizontal_medium slds-text-title_bold">Add Child Quote Line</div>
+                <div class="slds-p-horizontal_medium slds-text-title_bold">Add Child Product</div>
                 <div class="slds-grid">
-                    <div class="slds-col slds-m-around_xx-small slds-p-around_small  slds-size_3-of-12">
+                    <div class="slds-col slds-m-around_xx-small slds-size_3-of-12">
                         <lightning-record-picker
                                 lwc:ref="recordPicker"
                                 object-api-name="Product2"
@@ -87,31 +89,42 @@
                                 onchange={handleChange}
                         ></lightning-record-picker>
                     </div>
-                    <div class="slds-col slds-m-around_xx-small slds-p-around_small slds-size_3-of-12">
+                    <div class="slds-col slds-m-around_xx-small slds-size_2-of-12">
                         <lightning-input
                                 label="Enter Quantity"
                                 variant="label-hidden"
-                                placeholder= "Enter Quantity"
+                                placeholder= "Qty"
                                 value={quantity}
                                 type="number"
                                 min="1"
                                 onchange={qtyHandler}>
                             ></lightning-input>
                     </div>
-                    <div class="slds-col slds-m-around_xx-small slds-p-around_small slds-size_3-of-12">
+                    <div class="slds-col slds-m-around_xx-small slds-size_2-of-12">
                         <lightning-input
-                                label="Price"
+                                label="Enter Price"
+                                placeholder= " Price"
                                 variant="label-hidden"
-                                value={itemPrice}
+                                value={enteredPrice}
                                 type="number"
-                                formatter="currency"
-                                read-only="true"
+                                formatter = "currency"
                                 min="1"
-                        ></lightning-input>
+                                onchange={enteredPriceHandler}>
+                            ></lightning-input>
                     </div>
-                    <div class="slds-col slds-m-around_xx-small slds-p-around_small slds-size_3-of-12">
+                    <div class="slds-col slds-m-around_xx-small slds-size_2-of-12">
+                        <lightning-input
+                                label="Enter Description"
+                                placeholder= "Description"
+                                variant="label-hidden"
+                                value={description}
+                                type="text"
+                                onchange={descriptionHandler}>
+                            ></lightning-input>
+                    </div>
+                    <div class="slds-col slds-m-around_xx-small slds-size_2-of-12">
                         <lightning-button
-                                label="Add Product"
+                                label="Add"
                                 variant = "brand"
                                 onclick={handleAddProduct}
                                 disabled={disableAddProduct}

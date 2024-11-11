@@ -116,7 +116,10 @@ export default class QuoteLineGenerator extends LightningElement {
       await insertQuoteLineItem({
         quoteId: this.recordId,
         productId : this.selectedProduct2Id,
-        quantity: this.quantity
+        quantity: this.quantity,
+        description: this.description,
+        enteredPrice : this.enteredPrice,
+        parentQuoteLineId : null,
       });
       this.showToast('Success', 'Product added successfully', 'success');
       this.fetchUpdatedQuoteLineItems();
@@ -143,6 +146,14 @@ export default class QuoteLineGenerator extends LightningElement {
 
   qtyHandler(event){
     this.quantity = event.target.value;
+  }
+
+  descriptionHandler(event){
+    this.description = event.target.value;
+  }
+
+  enteredPriceHandler(event) {
+    this.enteredPrice = event.target.value;
   }
 
   handleError(error) {

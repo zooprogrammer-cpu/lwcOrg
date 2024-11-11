@@ -87,6 +87,8 @@ export default class QuoteLineInsertChild extends LightningElement {
         quoteId: this.recordId,
         productId : this.selectedRecordId,
         quantity: this.quantity,
+        description: this.description,
+        enteredPrice : this.enteredPrice,
         parentQuoteLineId : this.currentQuoteLine
       });
       this.showToast('Success', 'Product added successfully', 'success');
@@ -131,6 +133,14 @@ export default class QuoteLineInsertChild extends LightningElement {
 
   qtyHandler(event){
     this.quantity = event.target.value;
+  }
+
+  descriptionHandler(event){
+    this.description = event.target.value;
+  }
+
+  enteredPriceHandler(event) {
+    this.enteredPrice = event.target.value;
   }
 
   handleError(error) {

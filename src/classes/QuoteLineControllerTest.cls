@@ -72,7 +72,7 @@ public class QuoteLineControllerTest {
         Product2 product = [SELECT Id FROM Product2 LIMIT 1];
         Quote quote = [SELECT Id FROM Quote LIMIT 1];
         quote.Pricebook2Id = standardPricebookId;
-        QuoteLineController.insertQuoteLineItem(quote.Id, product.Id, 1, null);
+        QuoteLineController.insertQuoteLineItem(quote.Id, product.Id, 1, 'This is a description', 5, null);
         List<QuoteLineItem> newQuoteLines = [SELECT Id FROM QuoteLineItem WHERE QuoteId = :quote.Id];
         System.assertEquals(3, newQuoteLines.size(), 'A new Quote Line Item should be inserted');
     }

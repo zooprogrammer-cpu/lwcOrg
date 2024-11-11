@@ -11,12 +11,15 @@ public with sharing class QuoteLineController {
 
         sObjectList.sort(new OrderComparator());
 //        System.debug('sObjectList: ' + sObjectList);
-        for (SObject sObj : sObjectList) {
 
+        Set<String> uniqueFields = new Set<String>();
+
+        for (SObject sObj : sObjectList) {
             if (sObj.get('Active__c') == true) {
-                fieldsToQuery.add((String)sObj.get('Field_API_Name__c'));
+                uniqueFields.add((String)sObj.get('Field_API_Name__c'));
             }
         }
+        fieldsToQuery.addAll(uniqueFields);
 //        System.debug('fieldsToQuery:: ' + fieldsToQuery);
 
         for (String field : fieldsToQuery) {
@@ -54,7 +57,7 @@ public with sharing class QuoteLineController {
     }
 
     @AuraEnabled
-    public static void insertQuoteLineItem(Id quoteId, Id productId, Integer quantity, Id parentQuoteLineId) {
+    public static void insertQuoteLineItem(Id quoteId, Id productId, Integer quantity, String description, Integer enteredPrice,  Id parentQuoteLineId) {
         try {
 
             Id standardPricebookId = [SELECT Id FROM Pricebook2 WHERE IsStandard = TRUE].Id;
@@ -79,8 +82,9 @@ public with sharing class QuoteLineController {
             ql.Product2Id = productId;
             ql.QuoteId = quoteId;
             ql.Quantity = quantity;
+            ql.Description = description;
             ql.PricebookEntryId = pbe.Id;
-            ql.UnitPrice = pbe.UnitPrice;
+            ql.UnitPrice = enteredPrice;
             if (parentQuoteLineId!=null) {
                 ql.Parent_Quote_Line_Item__c = parentQuoteLineId;
             }

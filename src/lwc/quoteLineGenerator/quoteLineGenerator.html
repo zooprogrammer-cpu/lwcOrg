@@ -19,10 +19,10 @@
                         onchange={handleChange}
                 ></lightning-record-picker>
             </div>
-            <div class="slds-col slds-m-around_xx-small slds-size_3-of-12">
+            <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
                 <lightning-input
                         label="Enter Quantity"
-                        placeholder= "Enter Quantity"
+                        placeholder= "Qty"
                         variant="label-hidden"
                         value={quantity}
                         type="number"
@@ -30,20 +30,31 @@
                         onchange={qtyHandler}>
                     ></lightning-input>
             </div>
+            <div class="slds-col slds-m-around_xx-small slds-size_2-of-12">
+                <lightning-input
+                        label="Enter Price"
+                        placeholder= " Price"
+                        variant="label-hidden"
+                        value={enteredPrice}
+                        type="number"
+                        formatter = "currency"
+                        min="1"
+                        onchange={enteredPriceHandler}>
+                    ></lightning-input>
+            </div>
             <div class="slds-col slds-m-around_xx-small slds-size_3-of-12">
                 <lightning-input
-                        label="Price"
+                        label="Enter Description"
+                        placeholder= "Description"
                         variant="label-hidden"
-                        value={itemPrice}
-                        type="number"
-                        formatter="currency"
-                        read-only="true"
-                        min="1"
-                ></lightning-input>
+                        value={description}
+                        type="text"
+                        onchange={descriptionHandler}>
+                    ></lightning-input>
             </div>
             <div class="slds-col slds-m-around_xx-small slds-size_2-of-12">
                 <lightning-button
-                        label="Add Product"
+                        label="Add"
                         variant = "brand"
                         onclick={handleAddProduct}
                         disabled={disableAddProduct}
@@ -78,23 +89,25 @@
                                         <lightning-accordion-section name="children" label="More Details">
                                             <template for:each={ql.children} for:item="child">
                                                 <div key={child.Id}>
-                                                    <ul class="slds-p-horizontal_medium slds-list_dotted">
-                                                        <li>
-                                                            <template for:each={child.fields} for:item="field">
-                                                                <div key={field.label}>
-                                                                    <h3 class="slds-text-heading_small">
-                                                                        {field.label} :
-                                                                        <template lwc:if = {field.isCurrency}>
-                                                                            <lightning-formatted-number value= {field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
-                                                                        </template>
-                                                                        <template lwc:else>
-                                                                            {field.value}
-                                                                        </template>
-                                                                    </h3>
-                                                                </div>
-                                                            </template>
-                                                        </li>
-                                                    </ul>
+                                                    <div class="slds-grid slds-p-around_x-small">
+                                                        <ul class="slds-p-horizontal_medium slds-list_dotted">
+                                                            <li>
+                                                                <template for:each={child.fields} for:item="field">
+                                                                    <div key={field.label}>
+                                                                        <h3 class="slds-text-heading_small">
+                                                                            {field.label} :
+                                                                            <template lwc:if = {field.isCurrency}>
+                                                                                <lightning-formatted-number value= {field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                                            </template>
+                                                                            <template lwc:else>
+                                                                                {field.value}
+                                                                            </template>
+                                                                        </h3>
+                                                                    </div>
+                                                                </template>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </template>
                                         </lightning-accordion-section>

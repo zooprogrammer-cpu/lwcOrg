@@ -60,5 +60,5 @@
             <targetReference>Map_Screen</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
 </Flow>

@@ -31,6 +31,16 @@ export default class QuoteLineGenerator extends LightningElement {
   @track allFieldTypes;
   fieldLabelMap;
 
+  filter = {
+    criteria : [
+      {
+        fieldPath: 'IsActive',
+        operator: 'eq',
+        value: true
+      }
+    ]
+  }
+
   matchingInfo = {
     primaryField: {fieldPath:"Name"},
     additionalFields: [{fieldPath: "ProductCode"}]

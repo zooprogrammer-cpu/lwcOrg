@@ -1,13 +1,14 @@
 import { LightningElement, wire } from 'lwc';
 import getAccounts from '@salesforce/apex/MapControllerLWC.getAccounts'
 export default class MapsLWC extends LightningElement {
-    mapMarkers =[]
+    mapMarkers =[];
+    selectedMarker;
     markersTitle ="Accounts Location"
     @wire(getAccounts)
     wireHandler({data,error}){
         if (data){
-            console.log(data)
-            this.formatResponse(data)
+            console.log('data: ',data);
+            this.formatResponse(data);
         }
         if (error){
             console.error(error)
@@ -27,10 +28,10 @@ export default class MapsLWC extends LightningElement {
                 icon:'utility:salesforce',
                 title:item.Name,
                 value:item.Name,
-                description:item.description
+                description:item.description || ''
             }
         })
-        this.selectedMarker = this.mapMarkers.length && this.map[0].value
+        this.selectedMarker = this.mapMarkers.length && this.mapMarkers[0].value
     }
 
     callMarkerHandler(event){

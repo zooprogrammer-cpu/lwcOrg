@@ -1,8 +1,8 @@
 public with sharing class MapControllerLWC {
-@AuraEnabled(cacheable=true)
-public static List<Account> getAccounts(){
-   return [SELECT Id,Name,description, BillingStreet, 
+@AuraEnabled(Cacheable=true)
+public static List<Account> getAccounts() {
+   return [SELECT Id,Name,Description, BillingStreet,
    BillingCountry, BillingCity, BillingState, BillingPostalCode
-   FROM Account ORDER BY Name LIMIT 20];
+   FROM Account WHERE BillingPostalCode != NULL ORDER BY Name LIMIT 5];
 }
 }

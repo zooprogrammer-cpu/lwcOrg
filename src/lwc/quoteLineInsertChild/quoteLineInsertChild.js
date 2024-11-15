@@ -30,6 +30,16 @@ export default class QuoteLineInsertChild extends LightningElement {
 
   activeSections = ['children'];
 
+  filter = {
+    criteria : [
+      {
+        fieldPath: 'IsActive',
+        operator: 'eq',
+        value: true
+      }
+    ]
+  }
+
   matchingInfo = {
     primaryField: {fieldPath:"Name"},
     additionalFields: [{fieldPath: "ProductCode"}]
@@ -43,7 +53,6 @@ export default class QuoteLineInsertChild extends LightningElement {
   async handleList(wiredResult) {
     this.wiredResult = wiredResult;
     let quoteLines = [];
-    this.quoteLineGroupingArray = [];
     if (wiredResult.data) {
       wiredResult.data.forEach((ql) => {
         // console.log('each quote line: ', ql);
@@ -56,8 +65,8 @@ export default class QuoteLineInsertChild extends LightningElement {
     }
     if (this.quoteLineGroupingFromParent) {
       this.currentQuoteLine = this.quoteLineGroupingFromParent.qlRecordId;
-      let quoteLineGroupingArray = startQuoteLineOrganization(quoteLines);
-      this.currentQuoteLineGroup = [quoteLineGroupingArray.find(arr => arr.Id === this.currentQuoteLine)];
+      const quoteLineGroupingArrayTemp = startQuoteLineOrganization(quoteLines);
+      this.currentQuoteLineGroup = [quoteLineGroupingArrayTemp.find(arr => arr.Id === this.currentQuoteLine)];
       this.activeSections = ['children'];
     }
   }

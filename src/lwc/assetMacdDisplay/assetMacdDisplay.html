@@ -1,0 +1,91 @@
+<template>
+    <div>
+        <lightning-spinner if:true={isLoading} alternative-text="Loading"></lightning-spinner>
+        <div>
+            <template lwc:if={assetGroupingArray}>
+                <div class="slds-theme_shade">Select Asset</div>
+                <div class="slds-grid slds-wrap slds-m-around_small">
+                    <div class="slds-col slds-size_4-of-12 slds-text-title_bold">
+                        <h2>Asset Name</h2>
+                    </div>
+                    <div class="slds-col slds-size_5-of-12 slds-text-title_bold">
+                        <h2>Description</h2>
+                    </div>
+                    <div class="slds-col slds-size_3-of-12 slds-text-title_bold">
+                        <h2>Install Date</h2>
+                    </div>
+                </div>
+                <template for:each={assetGroupingArray} for:item="asset">
+                    <div key={asset.id} class="slds-border_bottom slds-p-bottom_small">
+                        <div class="slds-grid slds-wrap slds-m-around_small">
+                            <div class="slds-col slds-size_4-of-12">
+                                <lightning-input
+                                        type="checkbox"
+                                        label={asset.assetName}
+                                        data-id={asset.id}
+                                        onchange={handleCheckboxChange} >
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_5-of-12">
+                                <span>{asset.assetDescription}</span>
+                            </div>
+                            <div class="slds-col slds-size_3-of-12">
+                                <lightning-formatted-date-time
+                                    value={asset.assetInstallDate}
+                                    year="numeric"
+                                    day="numeric"
+                                    month="2-digit"
+                                    time-zone="UTC"
+                            >
+                            </lightning-formatted-date-time>
+                            </div>
+                        </div>
+                        <template for:each={asset.children} for:item="childAsset">
+                            <div key={childAsset.id} class="slds-grid slds-wrap slds-m-around_small">
+                                <div class="slds-col slds-size_4-of-12 child-asset-name">
+                                    {childAsset.assetName}
+                                </div>
+                                <div class="slds-col slds-size_5-of-12">
+                                    <span>{childAsset.assetDescription}</span>
+                                </div>
+                                <div class="slds-col slds-size_3-of-12">
+                                    <lightning-formatted-date-time
+                                            value={childAsset.assetInstallDate}
+                                            year="numeric"
+                                            day="numeric"
+                                            month="2-digit"
+                                            time-zone="UTC"
+                                    >
+                                    </lightning-formatted-date-time>
+                                </div>
+                            </div>
+                            <template for:each={childAsset.children} for:item="grandchildAsset">
+                                <div key={grandchildAsset.id} class="slds-grid slds-wrap slds-m-around_small">
+                                    <div class="slds-col slds-size_4-of-12 grand-child-asset-name">
+                                        {grandchildAsset.assetName}
+                                    </div>
+                                    <div class="slds-col slds-size_5-of-12">
+                                        <span>{grandchildAsset.assetDescription}</span>
+                                    </div>
+                                    <div class="slds-col slds-size_3-of-12">
+                                        <lightning-formatted-date-time
+                                                value={grandchildAsset.assetInstallDate}
+                                                year="numeric"
+                                                day="numeric"
+                                                month="2-digit"
+                                                time-zone="UTC"
+                                        >
+                                        </lightning-formatted-date-time>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </template>
+            </template>
+            <template lwc:else>
+                <div>No Assets found</div>
+            </template>
+        </div>
+    </div>
+</template>

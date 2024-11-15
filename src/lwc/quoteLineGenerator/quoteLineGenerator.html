@@ -11,6 +11,7 @@
                 <lightning-record-picker
                         lwc:ref="recordPicker"
                         object-api-name="Product2"
+                        filter={filter}
                         placeholder="Search..."
                         label="Select a record"
                         variant=label-hidden
@@ -72,7 +73,7 @@
                                 <template for:each={ql.fields} for:item="field">
                                     <div key={field.label}>
                                         <h2 class="slds-text-heading_small">
-                                            {field.label} :
+                                            {field.label}:&nbsp;
                                             <template lwc:if = {field.isCurrency}>
                                                 <lightning-formatted-number value= {field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
                                             </template>
@@ -95,7 +96,7 @@
                                                                 <template for:each={child.fields} for:item="field">
                                                                     <div key={field.label}>
                                                                         <h3 class="slds-text-heading_small">
-                                                                            {field.label} :
+                                                                            {field.label}:&nbsp;
                                                                             <template lwc:if = {field.isCurrency}>
                                                                                 <lightning-formatted-number value= {field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
                                                                             </template>

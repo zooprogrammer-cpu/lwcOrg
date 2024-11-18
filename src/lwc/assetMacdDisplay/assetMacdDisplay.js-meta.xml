@@ -13,6 +13,7 @@
             <property name="objectName" type="String" label="Name of the Object"/>
             <property name="selectedAssetIdsToFlow" type="String" label="Asset Ids from LWC"/>
             <property name="selectedAssets" label="Selected Assets List" type="@salesforce/schema/Asset[]" role="outputOnly"/>
+            <property name="selectedAssIds" type="String[]" label="Assets Ids fromFlowAttributeChangeEvent"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

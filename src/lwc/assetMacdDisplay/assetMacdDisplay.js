@@ -5,7 +5,7 @@
 import {LightningElement, api, track, wire} from 'lwc';
 import getRelatedAssets from '@salesforce/apex/AssetMacdController.getRelatedAssets';
 import getSelectedAssets from '@salesforce/apex/AssetMacdController.getSelectedAssets';
-import {flowAttributeChangeEvent} from "lightning/flowSupport";
+import {FlowAttributeChangeEvent} from "lightning/flowSupport";
 
 export default class AssetMacdDisplay extends LightningElement {
   @api recordId = '';
@@ -13,13 +13,11 @@ export default class AssetMacdDisplay extends LightningElement {
   @track assetGroupingArray =[];
   @track selectedAssetIds = [];
   @track assetLines = [];
-  // @api selectedAssetIdsToFlow;
   @api selectedAssets;
   @track isLoading = false;
 
   async connectedCallback() {
     console.log('connectedCallback');
-    // const parentResult = await getCurrentAsset({recordId: this.recordId});
     const relatedAssets = await getRelatedAssets({recordId: this.recordId});
     console.log('relatedAssets::', relatedAssets);
     relatedAssets.forEach((asset) =>{
@@ -137,8 +135,25 @@ export default class AssetMacdDisplay extends LightningElement {
       this.selectedAssets = await getSelectedAssets({assetIds: this.selectedAssetIds});
       console.log('this.selectedAssets: ', this.selectedAssets);
 
+      const attributeChangeEvent = new FlowAttributeChangeEvent(
+          "selectedAssIds",
+          this.selectedAssetIds
+      );
+      this.dispatchEvent(attributeChangeEvent);
+
     }
     this.isLoading = false;
+  }
+
+  // This selectedAssIds  is the value that is working on the Flow!!!
+  @api set selectedAssIds(value) {
+    if (value) {
+      this.selectedAssetIds = value;
+    }
+  }
+
+  get selectedAssIds() {
+    return this.selectedAssetIds;
   }
 
   // Not used

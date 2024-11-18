@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
-    <description>Assets showing up in Picklist</description>
-    <dynamicChoiceSets>
-        <name>selectedAssets</name>
-        <collectionReference>assetMacdDisplayLWC.selectedAssets</collectionReference>
-        <dataType>String</dataType>
-        <displayField>Name</displayField>
-        <object>Asset</object>
-        <valueField>Id</valueField>
-    </dynamicChoiceSets>
+    <description>Selected Assets Updating Successfully</description>
     <environments>Default</environments>
     <interviewLabel>Asset Flow with LWC {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Asset Flow with LWC</label>
+    <loops>
+        <name>loop_over_each_asset</name>
+        <label>loop over each asset</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <collectionReference>storedAssets</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Update_description</targetReference>
+        </nextValueConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -32,22 +35,68 @@
         </value>
     </processMetadataValues>
     <processType>Flow</processType>
-    <screens>
-        <name>assetRecords</name>
-        <label>assetRecords</label>
+    <recordLookups>
+        <name>Get_assets</name>
+        <label>Get assets</label>
         <locationX>176</locationX>
         <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>displayAssets</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>assetMacdDisplayLWC.selectedAssIds</elementReference>
+            </value>
+        </filters>
+        <object>Asset</object>
+        <outputReference>storedAssets</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>Description</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_description</name>
+        <label>Update description</label>
+        <locationX>264</locationX>
+        <locationY>566</locationY>
+        <connector>
+            <targetReference>loop_over_each_asset</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>loop_over_each_asset.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>I have been updated by the flow</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Asset</object>
+    </recordUpdates>
+    <screens>
+        <name>displayAssets</name>
+        <label>displayAssets</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
+        <connector>
+            <targetReference>loop_over_each_asset</targetReference>
+        </connector>
         <fields>
-            <name>Select_an_Asset</name>
-            <choiceReferences>selectedAssets</choiceReferences>
-            <dataType>String</dataType>
-            <fieldText>Select an Asset</fieldText>
-            <fieldType>MultiSelectCheckboxes</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-            <isRequired>false</isRequired>
+            <name>hereAre</name>
+            <fieldText>&lt;p&gt;here are the assets-&lt;/p&gt;&lt;p&gt;{!Get_assets}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -61,7 +110,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>assetRecords</targetReference>
+            <targetReference>Get_assets</targetReference>
         </connector>
         <fields>
             <name>assetMacdDisplayLWC</name>
@@ -100,5 +149,13 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>storedAssets</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Asset</objectType>
     </variables>
 </Flow>

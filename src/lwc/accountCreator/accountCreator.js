@@ -14,5 +14,7 @@ export default class AccountCreator extends LightningElement {
             variant: "success"
         });
         this.dispatchEvent(toastEvent);
+        console.log('Testing git');
     }
+  
 }

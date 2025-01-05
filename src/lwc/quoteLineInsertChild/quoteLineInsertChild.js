@@ -97,7 +97,7 @@ export default class QuoteLineInsertChild extends LightningElement {
         productId : this.selectedRecordId,
         quantity: this.quantity,
         description: this.description,
-        enteredPrice : this.enteredPrice,
+        enteredPrice : this.enteredPrice ? this.enteredPrice : 0,
         parentQuoteLineId : this.currentQuoteLine
       });
       this.showToast('Success', 'Product added successfully', 'success');

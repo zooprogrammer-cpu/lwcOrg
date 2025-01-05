@@ -128,7 +128,7 @@ export default class QuoteLineGenerator extends LightningElement {
         productId : this.selectedProduct2Id,
         quantity: this.quantity,
         description: this.description,
-        enteredPrice : this.enteredPrice,
+        enteredPrice : this.enteredPrice ? this.enteredPrice : 0,
         parentQuoteLineId : null,
       });
       this.showToast('Success', 'Product added successfully', 'success');

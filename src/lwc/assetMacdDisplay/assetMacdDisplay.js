@@ -162,6 +162,17 @@ export default class AssetMacdDisplay extends LightningElement {
       this.selectedAssetIds = this.assetLines.map(asset => asset.Id);
       console.log('all selectedAssetIds: ', JSON.stringify(this.selectedAssetIds));
       this.isLoading = false;
+    } else {
+      // Update all checkBoxes to be unchecked
+      this.assetGroupingArray = this.assetGroupingArray.map(asset => {
+        asset.checkedBox = false;
+        return asset;
+      });
+
+      // collect all asset Ids
+      this.selectedAssetIds = [];
+      console.log('all selectedAssetIds: ', JSON.stringify(this.selectedAssetIds));
+      this.isLoading = false;
     }
   }
 

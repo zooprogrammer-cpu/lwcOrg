@@ -30,7 +30,7 @@ export default class AssetMacdDisplay extends LightningElement {
       obj.parentAssetId = asset.ParentId;
       this.assetLines.push(obj);
     });
-    // console.log('assetLines: ', JSON.stringify(this.assetLines));
+    console.log('assetLines: ', JSON.stringify(this.assetLines));
     this.assetGroupingArray = this.startAssetOrganization(this.assetLines);
     // console.log('this.assetGroupingArray :::', JSON.stringify(this.assetGroupingArray) );
   }
@@ -50,7 +50,8 @@ export default class AssetMacdDisplay extends LightningElement {
             assetInstallDate : topAsset.InstallDate,
             assetDescription: topAsset.Description,
             children: childrenAssets,
-            hasChildren : childrenAssets.length > 0
+            hasChildren : childrenAssets.length > 0,
+            checkedBox : false
           }
       )
     });
@@ -143,6 +144,25 @@ export default class AssetMacdDisplay extends LightningElement {
 
     }
     this.isLoading = false;
+  }
+
+  handleSelectAll(event) {
+    console.log('Select all');
+    this.isLoading = true;
+
+    if (event.target.checked) {
+      // Update all checkBoxes to be checked
+      this.assetGroupingArray = this.assetGroupingArray.map(asset => {
+        asset.checkedBox = true;
+        return asset;
+      });
+
+      // collect all asset Ids
+      console.log('this.assetLines:: ' , this.assetLines);
+      this.selectedAssetIds = this.assetLines.map(asset => asset.Id);
+      console.log('all selectedAssetIds: ', JSON.stringify(this.selectedAssetIds));
+      this.isLoading = false;
+    }
   }
 
   // This selectedAssIds  is the value that is working on the Flow!!!

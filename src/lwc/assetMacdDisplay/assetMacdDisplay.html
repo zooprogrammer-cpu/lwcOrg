@@ -4,6 +4,13 @@
         <div>
             <template lwc:if={assetGroupingArray}>
                 <div class="slds-theme_shade">Select Asset</div>
+                <div class="slds-col slds-size_4-of-12">
+                    <lightning-input
+                            type="checkbox"
+                            onchange={handleSelectAll}
+                            label='Select all'>
+                    </lightning-input>
+                </div>
                 <div class="slds-grid slds-wrap slds-m-around_small">
                     <div class="slds-col slds-size_4-of-12 slds-text-title_bold">
                         <h2>Asset Name</h2>
@@ -23,6 +30,7 @@
                                         type="checkbox"
                                         label={asset.assetName}
                                         data-id={asset.id}
+                                        checked = {asset.checkedBox}
                                         onchange={handleCheckboxChange} >
                                 </lightning-input>
                             </div>

@@ -44,15 +44,8 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
         let customizedQuoteLine = customizeObjectKeys(ql);
         quoteLines.push(customizedQuoteLine);
       })
-      // console.log('quoteLines::', JSON.stringify(quoteLines));
-      // this.allFieldTypes = await this.getAllFieldTypes(wiredResult.data);
-      // console.log('this.allFieldTypes: ', JSON.stringify(this.allFieldTypes));
-      // this.fieldLabelMap = await this.getAllFieldLabels(wiredResult.data);
-      // console.log('this.fieldLabelMap: ', JSON.stringify(this.fieldLabelMap));
     }
     this.quoteLineGroupingArray = startQuoteLineOrganization(quoteLines);
-    console.log('this.quoteLineGroupingArray' ,JSON.stringify(this.quoteLineGroupingArray));
-    // console.log('allFieldTypes::', JSON.stringify(this.allFieldTypes));
   }
 
   showFlowHandler() {
@@ -187,37 +180,6 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
     this.showQuoteLineEditModal = true;
   }
 
-  // Manipulate which fields to not display on the UI here
-  formatFieldsForDisplay(quoteLine) {
-    // console.log('quoteLine 😭 ', JSON.stringify(quoteLine));
-
-    const fields = Object.keys(quoteLine)
-        .filter(key => key !== 'Product2'
-            && key !== 'Id'
-            && key !== 'Product2Id'
-            && key !== 'children'
-            && key !== 'Parent_Quote_Line_Item__c'
-            && key !== 'hasParentQuoteLineItem'
-            && !key.includes('__r')
-            //&& key !== 'Location__c'
-        )
-        .map(key => {
-          let isCurrency = this.getMatchingFieldType(key) === 'CURRENCY';
-          // return { label: key, value: quoteLine[key], isCurrency: isCurrency };
-          return { label: this.fieldLabelMap[key] || key, value: quoteLine[key], isCurrency: isCurrency };
-        });
-
-    if (quoteLine.Product2 && quoteLine.Product2.Name) {
-      fields.unshift({ label: 'Product Name', value: quoteLine.Product2.Name, isCurrency: false });
-    }
-    // if (quoteLine.Location__r) {
-    //   fields.push({ label: 'Location', value: quoteLine.Location__r.Name, isCurrency: false });
-    // }
-
-    console.log('fields##', JSON.stringify(fields));
-    return fields;
-  }
-
   getFirstTwoFields(gFields) {
     let firstTwo = [];
 
@@ -235,15 +197,15 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
   }
 
   get preparedQuoteLines() {
-    const preparedQLs = this.quoteLineGroupingArray.map(ql => {
-      const formattedFieldsForDisplay = this.formatFieldsForDisplay(ql);
+    const preparedQLs = this.quoteLineGroupingArray.map(obj => {
+      const formattedFieldsForDisplay = this.formatFieldsForDisplay(obj);
       console.log('formattedFieldsForDisplay: ' + JSON.stringify(formattedFieldsForDisplay));
 
       return {
-        ...ql, // Need this to have access to Id
+        ...obj.quoteLine, // Need this to have access to Id
         firstTwoFields: this.getFirstTwoFields(formattedFieldsForDisplay),
         remainingFields : this.getRemainingFields(formattedFieldsForDisplay),
-        children: ql.children.map(child => ({
+        children: obj.children.map(child => ({
           ...child, // Need this to have access to Id
           firstTwoFields: this.getFirstTwoFields(this.formatFieldsForDisplay(child)),
           remainingFields : this.getRemainingFields(this.formatFieldsForDisplay(child))
@@ -254,32 +216,56 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
     return preparedQLs;
   }
 
-  getMatchingFieldType(fieldName) {
-    if (this.allFieldTypes && this.allFieldTypes[fieldName]) {
-      return this.allFieldTypes[fieldName];
+  // Manipulate which fields to not display on the UI here
+  formatFieldsForDisplay(obj) {
+    console.log('obj::' , JSON.stringify(obj));
+    let fields = [];
+
+    const quoteLine = obj.quoteLine;
+    const fieldTypes = obj.fieldTypes;
+    const labels = obj.labels;
+
+    for (let key in quoteLine) {
+      if (quoteLine.hasOwnProperty(key) && key !== 'Product2' && key !== 'Location__r') {
+        let isCurrency = fieldTypes[key] === 'CURRENCY';
+        fields.push({ label: labels[key] || key, value: quoteLine[key], isCurrency: isCurrency });
+      }
     }
-    return 'STRING'; //default
+
+    if (quoteLine.Product2 && quoteLine.Product2.Name) {
+      fields.unshift({ label: 'Product Name', value: quoteLine.Product2.Name, isCurrency: false });
+    }
+
+    console.log('fields##', JSON.stringify(fields));
+    return fields;
   }
 
-  async  getAllFieldTypes(quoteLines) {
-    if (quoteLines) {
-      const allFieldTypes = await getFieldTypes({selectedQuoteLines: quoteLines});
-      return allFieldTypes;
-      // return null;
-    }
-  }
+  // getMatchingFieldType(fieldName) {
+  //   if (this.allFieldTypes && this.allFieldTypes[fieldName]) {
+  //     return this.allFieldTypes[fieldName];
+  //   }
+  //   return 'STRING'; //default
+  // }
 
-  async getAllFieldLabels(quoteLines) {
-    if (quoteLines) {
-      const getCustomMetadataResult = await getCustomMetadata ({customMetaDataName : 'Quote_Line_Item_Setting__mdt', customMetaDataRecordDevName : ''});
-      const fieldLabelMap = getCustomMetadataResult.reduce((map, obj) => {
-        map[obj.Field_API_Name__c] = obj.Display_Label__c;
-        return map;
-      }, {});
+  // async  getAllFieldTypes(quoteLines) {
+  //   if (quoteLines) {
+  //     const allFieldTypes = await getFieldTypes({selectedQuoteLines: quoteLines});
+  //     return allFieldTypes;
+  //     // return null;
+  //   }
+  // }
 
-      return fieldLabelMap;
-    }
-  }
+  // async getAllFieldLabels(quoteLines) {
+  //   if (quoteLines) {
+  //     const getCustomMetadataResult = await getCustomMetadata ({customMetaDataName : 'Quote_Line_Item_Setting__mdt', customMetaDataRecordDevName : ''});
+  //     const fieldLabelMap = getCustomMetadataResult.reduce((map, obj) => {
+  //       map[obj.Field_API_Name__c] = obj.Display_Label__c;
+  //       return map;
+  //     }, {});
+  //
+  //     return fieldLabelMap;
+  //   }
+  // }
 
   closeQuickAction() {
     this.dispatchEvent(new CloseActionScreenEvent());

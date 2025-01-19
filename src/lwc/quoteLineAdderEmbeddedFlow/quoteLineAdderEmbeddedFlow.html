@@ -51,76 +51,76 @@
                                     </lightning-accordion>
                                 </div>
                             </template>
-                            <template lwc:if={ql.children.length}>
-                                <template for:each={ql.children} for:item="child">
-                                    <div class="slds-grid"  key={child.Id}>
-                                        <div class="slds-grid slds-p-around_xx-small slds-size_9-of-12">
-                                            <ul class="slds-p-horizontal_xx-small slds-list_dotted">
-                                                <li>
-                                                    <template for:each={child.firstTwoFields} for:item="field">
-                                                        <div key={field.label}>
-                                                            <h3>
-                                                                {field.label}:&nbsp;
-                                                                <template lwc:if={field.isCurrency}>
-                                                                    <lightning-formatted-number value={field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
-                                                                </template>
-                                                                <template lwc:else>
-                                                                    {field.value}
-                                                                </template>
-                                                            </h3>
-                                                        </div>
-                                                    </template>
-                                                    <template lwc:if={child.remainingFields.length}>
-                                                        <div class="slds-wrap">
-                                                            <lightning-accordion allow-multiple-sections-open active-section-name="remaining items">
-                                                                <lightning-accordion-section name="remaining" label="More Details"  class="accordionClass">
-                                                                    <template for:each={child.remainingFields} for:item="field">
-                                                                        <div key={field.label}>
-                                                                            <h2>
-                                                                                {field.label}:&nbsp;
-                                                                                <template lwc:if={field.isCurrency}>
-                                                                                    <lightning-formatted-number value={field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
-                                                                                </template>
-                                                                                <template lwc:else>
-                                                                                    {field.value}
-                                                                                </template>
-                                                                            </h2>
-                                                                        </div>
-                                                                    </template>
-                                                                </lightning-accordion-section>
-                                                            </lightning-accordion>
-                                                        </div>
-                                                    </template>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
-                                            <lightning-icon
-                                                    icon-name='action:edit'
-                                                    alternative-text='Edit'
-                                                    size='x-small'
-                                                    title='Edit'
-                                                    data-id={child.Id}
-                                                    onclick={handleEditQuoteLineItem}
-                                                    class="hover-highlight"
-                                            >
-                                            </lightning-icon>
-                                        </div>
-                                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
-                                            <lightning-icon
-                                                    icon-name="action:delete"
-                                                    data-id={child.Id}
-                                                    onclick={deleteQuoteLineItem}
-                                                    alternative-text="Delete"
-                                                    size="x-small"
-                                                    title="Delete"
-                                                    class="hover-highlight"
-                                            >
-                                            </lightning-icon>
-                                        </div>
-                                    </div>
-                                </template>
-                            </template>
+<!--                            <template lwc:if={ql.children.length}>-->
+<!--                                <template for:each={ql.children} for:item="child">-->
+<!--                                    <div class="slds-grid"  key={child.Id}>-->
+<!--                                        <div class="slds-grid slds-p-around_xx-small slds-size_9-of-12">-->
+<!--                                            <ul class="slds-p-horizontal_xx-small slds-list_dotted">-->
+<!--                                                <li>-->
+<!--                                                    <template for:each={child.firstTwoFields} for:item="field">-->
+<!--                                                        <div key={field.label}>-->
+<!--                                                            <h3>-->
+<!--                                                                {field.label}:&nbsp;-->
+<!--                                                                <template lwc:if={field.isCurrency}>-->
+<!--                                                                    <lightning-formatted-number value={field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>-->
+<!--                                                                </template>-->
+<!--                                                                <template lwc:else>-->
+<!--                                                                    {field.value}-->
+<!--                                                                </template>-->
+<!--                                                            </h3>-->
+<!--                                                        </div>-->
+<!--                                                    </template>-->
+<!--                                                    <template lwc:if={child.remainingFields.length}>-->
+<!--                                                        <div class="slds-wrap">-->
+<!--                                                            <lightning-accordion allow-multiple-sections-open active-section-name="remaining items">-->
+<!--                                                                <lightning-accordion-section name="remaining" label="More Details"  class="accordionClass">-->
+<!--                                                                    <template for:each={child.remainingFields} for:item="field">-->
+<!--                                                                        <div key={field.label}>-->
+<!--                                                                            <h2>-->
+<!--                                                                                {field.label}:&nbsp;-->
+<!--                                                                                <template lwc:if={field.isCurrency}>-->
+<!--                                                                                    <lightning-formatted-number value={field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>-->
+<!--                                                                                </template>-->
+<!--                                                                                <template lwc:else>-->
+<!--                                                                                    {field.value}-->
+<!--                                                                                </template>-->
+<!--                                                                            </h2>-->
+<!--                                                                        </div>-->
+<!--                                                                    </template>-->
+<!--                                                                </lightning-accordion-section>-->
+<!--                                                            </lightning-accordion>-->
+<!--                                                        </div>-->
+<!--                                                    </template>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">-->
+<!--                                            <lightning-icon-->
+<!--                                                    icon-name='action:edit'-->
+<!--                                                    alternative-text='Edit'-->
+<!--                                                    size='x-small'-->
+<!--                                                    title='Edit'-->
+<!--                                                    data-id={child.Id}-->
+<!--                                                    onclick={handleEditQuoteLineItem}-->
+<!--                                                    class="hover-highlight"-->
+<!--                                            >-->
+<!--                                            </lightning-icon>-->
+<!--                                        </div>-->
+<!--                                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">-->
+<!--                                            <lightning-icon-->
+<!--                                                    icon-name="action:delete"-->
+<!--                                                    data-id={child.Id}-->
+<!--                                                    onclick={deleteQuoteLineItem}-->
+<!--                                                    alternative-text="Delete"-->
+<!--                                                    size="x-small"-->
+<!--                                                    title="Delete"-->
+<!--                                                    class="hover-highlight"-->
+<!--                                            >-->
+<!--                                            </lightning-icon>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </template>-->
+<!--                            </template>-->
                         </div>
                         <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
                             <lightning-icon

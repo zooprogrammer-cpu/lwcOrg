@@ -205,11 +205,11 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
         ...obj.quoteLine, // Need this to have access to Id
         firstTwoFields: this.getFirstTwoFields(formattedFieldsForDisplay),
         remainingFields : this.getRemainingFields(formattedFieldsForDisplay),
-        children: obj.children.map(child => ({
-          ...child, // Need this to have access to Id
-          firstTwoFields: this.getFirstTwoFields(this.formatFieldsForDisplay(child)),
-          remainingFields : this.getRemainingFields(this.formatFieldsForDisplay(child))
-        }))
+        // children: obj.children.map(child => ({
+        //   ...child, // Need this to have access to Id
+        //   firstTwoFields: this.getFirstTwoFields(this.formatFieldsForDisplay(child)),
+        //   remainingFields : this.getRemainingFields(this.formatFieldsForDisplay(child))
+        // }))
       };
     });
     console.log('preparedQLs: ', preparedQLs);

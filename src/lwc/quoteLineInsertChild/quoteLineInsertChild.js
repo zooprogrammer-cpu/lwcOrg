@@ -3,11 +3,9 @@
  */
 
 import {LightningElement, api, track, wire} from 'lwc';
-import {ShowToastEvent} from "lightning/platformShowToastEvent";
 import {refreshApex} from "@salesforce/apex";
 import {RefreshEvent} from "lightning/refresh";
-import getNewQuoteLineItem from "@salesforce/apex/QuoteLineController.getNewQuoteLineItem";
-import getQuoteLineItems from "@salesforce/apex/QuoteLineController.getQuoteLineItems";
+import fetchQuoteLineDetails from "@salesforce/apex/QuoteLineController.fetchQuoteLineDetails";
 
 export default class QuoteLineInsertChild extends LightningElement {
   @api parentQuoteLineId;
@@ -22,7 +20,7 @@ export default class QuoteLineInsertChild extends LightningElement {
   @track allFieldTypes;
   isShowFlow = true;
 
-  @wire(getQuoteLineItems, {quoteId: '$recordId'})
+  @wire(fetchQuoteLineDetails, ({objectApiName: 'QuoteLineItem', fieldSetName: 'Dynamic_Field_Set', customLimit: 10, quoteId: '$recordId'}))
   async handleList(wiredResult) {
     this.wiredResult = wiredResult;
   }
@@ -59,18 +57,18 @@ export default class QuoteLineInsertChild extends LightningElement {
     return "Quote_Line_Generator_with_Screen_Flow";
   }
 
-  async handleChange(event) {
-    // console.log('event', event);
-    this.selectedRecordId =event.detail.recordId;
-    // console.log("---this.selectedRecordId : ", this.selectedRecordId );
-
-    if (this.selectedRecordId) {
-      this.disableAddProduct = false;
-      const result = await getNewQuoteLineItem({productId: this.selectedRecordId});
-      this.itemPrice = result.UnitPrice;
-      // console.log('The price is: ', this.itemPrice);
-    }
-  }
+  // async handleChange(event) {
+  //   // console.log('event', event);
+  //   this.selectedRecordId =event.detail.recordId;
+  //   // console.log("---this.selectedRecordId : ", this.selectedRecordId );
+  //
+  //   if (this.selectedRecordId) {
+  //     this.disableAddProduct = false;
+  //     const result = await getNewQuoteLineItem({productId: this.selectedRecordId});
+  //     this.itemPrice = result.UnitPrice;
+  //     // console.log('The price is: ', this.itemPrice);
+  //   }
+  // }
 
   fetchUpdatedQuoteLineItems() {
     console.log('Refreshing Apex data...');

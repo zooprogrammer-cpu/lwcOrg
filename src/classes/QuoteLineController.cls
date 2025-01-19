@@ -77,10 +77,10 @@ public with sharing class QuoteLineController {
         System.debug('FieldSet: ' + fieldSet);
 
         // Build a dynamic query SOQL query using the fields in the field set
-        String query = 'SELECT Id, Product2.Name, ';
+        String query = 'SELECT Id, Product2.Name,  ';
         for (Schema.FieldSetMember field : fieldSet.getFields()) {
             System.debug('Field:: ' + field.getType());
-            if (field.getType() == Schema.DisplayType.Reference && field.getFieldPath() != 'Product2Id') {
+            if (field.getType() == Schema.DisplayType.Reference && field.getFieldPath() != 'Product2Id' && field.getFieldPath() != 'Parent_Quote_Line_Item__c') {
                 System.debug('Reference field: + ' + field);
                 System.debug('Reference field path: ' + field.getFieldPath());
                 query += field.getFieldPath().replace('__c', '__r.Name') + ', ';

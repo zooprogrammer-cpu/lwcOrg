@@ -130,7 +130,6 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
       this.fieldLabelMap = await this.getAllFieldLabels(wiredResult.data);
       console.log('this.fieldLabelMap: ', JSON.stringify(this.fieldLabelMap));
     }
-    console.log('quoteLInes old:',  quoteLines);
     this.quoteLineGroupingArray = startQuoteLineOrganization(quoteLines);
     // console.log('allFieldTypes::', JSON.stringify(this.allFieldTypes));
   }

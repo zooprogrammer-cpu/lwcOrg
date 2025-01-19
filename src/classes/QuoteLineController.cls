@@ -2,37 +2,116 @@
  * Created by ashbas on 10/21/24.
  */
 public with sharing class QuoteLineController {
-    @AuraEnabled(Cacheable=true)
-    public static List<QuoteLineItem> getQuoteLineItems(Id quoteId) {
-        String s = '';
-        Integer i = 0;
-        List<String> fieldsToQuery = new List<String>{'Id', 'Parent_Quote_Line_Item__c'};
-        List<SObject> sObjectList = CustomMetadataService.getCustomMetadata('Quote_Line_Item_Setting__mdt', '');
+//    @AuraEnabled(Cacheable=true)
+//    public static List<QuoteLineItem> getQuoteLineItems(Id quoteId) {
+//        String s = '';
+//        Integer i = 0;
+//        List<String> fieldsToQuery = new List<String>{'Id', 'Parent_Quote_Line_Item__c'};
+//        List<SObject> sObjectList = CustomMetadataService.getCustomMetadata('Quote_Line_Item_Setting__mdt', '');
+//
+//        sObjectList.sort(new OrderComparator());
+////        System.debug('sObjectList: ' + sObjectList);
+//
+//        Set<String> uniqueFields = new Set<String>();
+//
+//        for (SObject sObj : sObjectList) {
+//            if (sObj.get('Active__c') == true) {
+//                uniqueFields.add((String)sObj.get('Field_API_Name__c'));
+//            }
+//        }
+//        fieldsToQuery.addAll(uniqueFields);
+////        System.debug('fieldsToQuery:: ' + fieldsToQuery);
+//
+//        for (String field : fieldsToQuery) {
+//            if ( i ==0 ) {
+//                s+= field;
+//            } else {
+//                s+= ',' + field;
+//            }
+//            i ++;
+//        }
+//        String query = 'SELECT ' + s + ' FROM QuoteLineItem WHERE QuoteId = : quoteId';
+////        System.debug('query: ' + query);
+//        return Database.query(query);
+//    }
+//    @AuraEnabled(Cacheable=true)
+//    public static List<QuoteLineItem> getQuoteLineItemsWIthFieldSet(String objectApiName, String fieldSetName, Integer customLimit, Id quoteId) {
+//        // Get the field set definition for the specified field set on the specified object
+//        Schema.DescribeSObjectResult objectDescribe = Schema.getGlobalDescribe().get(objectApiName).getDescribe();
+//        Schema.FieldSet fieldSet = objectDescribe.fieldSets.getMap().get(fieldSetName);
+//        System.debug('FieldSet: ' + fieldSet);
+//
+//        // Build a dynamic query SOQL query using the fields in the field set
+//        String query = 'SELECT Id, Product2.Name, ';
+//        for (Schema.FieldSetMember field : fieldSet.getFields()) {
+//            System.debug('Field:: ' + field.getType());
+//            if (field.getType() == Schema.DisplayType.Reference && field.getFieldPath() != 'Product2Id') {
+//                System.debug('Reference field: + ' + field);
+//                System.debug('Reference field path: ' + field.getFieldPath());
+//                query += field.getLabel() + '__r.Name' + ', ';
+//            } else {
+//                query += field.getFieldPath() + ', ';
+//            }
+//        }
+//
+//        query = query.substring(0, query.length() - 2); // Remove the trailing comma
+//        query += ' FROM ' + objectApiName;
+//        query += ' WHERE QuoteId = :quoteId';
+//        if (customLimit != null) {
+//            query += ' LIMIT ' + customLimit;
+//        }
+//
+//        System.debug('query::' + query);
+//        List<QuoteLineItem> results = Database.query(query);
+//        return results;
+//
+//    }
 
-        sObjectList.sort(new OrderComparator());
-//        System.debug('sObjectList: ' + sObjectList);
+    @AuraEnabled (Cacheable = true)
+    public static List<QuoteLineWrapperClass> fetchQuoteLineDetails(String objectApiName, String fieldSetName, Integer customLimit, Id quoteId) {
+        List<QuoteLineWrapperClass> quoteLineWrapperList = new List<QuoteLineWrapperClass>();
 
-        Set<String> uniqueFields = new Set<String>();
+        // Get the field set definition for the specified field set on the specified object
+        Schema.DescribeSObjectResult objectDescribe = Schema.getGlobalDescribe().get(objectApiName).getDescribe();
+        Schema.FieldSet fieldSet = objectDescribe.fieldSets.getMap().get(fieldSetName);
+        System.debug('FieldSet: ' + fieldSet);
 
-        for (SObject sObj : sObjectList) {
-            if (sObj.get('Active__c') == true) {
-                uniqueFields.add((String)sObj.get('Field_API_Name__c'));
-            }
-        }
-        fieldsToQuery.addAll(uniqueFields);
-//        System.debug('fieldsToQuery:: ' + fieldsToQuery);
-
-        for (String field : fieldsToQuery) {
-            if ( i ==0 ) {
-                s+= field;
+        // Build a dynamic query SOQL query using the fields in the field set
+        String query = 'SELECT Id, Product2.Name, ';
+        for (Schema.FieldSetMember field : fieldSet.getFields()) {
+            System.debug('Field:: ' + field.getType());
+            if (field.getType() == Schema.DisplayType.Reference && field.getFieldPath() != 'Product2Id') {
+                System.debug('Reference field: + ' + field);
+                System.debug('Reference field path: ' + field.getFieldPath());
+                query += field.getFieldPath().replace('__c', '__r.Name') + ', ';
             } else {
-                s+= ',' + field;
+                query += field.getFieldPath() + ', ';
             }
-            i ++;
         }
-        String query = 'SELECT ' + s + ' FROM QuoteLineItem WHERE QuoteId = : quoteId';
-//        System.debug('query: ' + query);
-        return Database.query(query);
+
+        query = query.substring(0, query.length() - 2); // Remove the trailing comma
+        query += ' FROM ' + objectApiName;
+        query += ' WHERE QuoteId = :quoteId';
+        if (customLimit != null) {
+            query += ' LIMIT ' + customLimit;
+        }
+
+        System.debug('query::' + query);
+
+        // Execute the query and create instances of the wrapper class
+        for (QuoteLineItem ql : Database.query(query)) {
+            Map<String, String> labels = new Map<String, String>();
+            Map<String, String> fieldTypes = new Map<String, String>();
+            for (Schema.FieldSetMember field : fieldSet.getFields()) {
+                labels.put(field.getFieldPath(), field.getLabel());
+                fieldTypes.put(field.getFieldPath(), String.valueOf(field.getType()));
+            }
+            quoteLineWrapperList.add(new QuoteLineWrapperClass(ql, labels, fieldTypes));
+        }
+
+        System.debug('quoteLineWrapperList: ' + quoteLineWrapperList);
+
+        return quoteLineWrapperList;
     }
 
     @AuraEnabled
@@ -56,56 +135,6 @@ public with sharing class QuoteLineController {
         }
     }
 
-    @AuraEnabled
-    public static void insertQuoteLineItem(Id quoteId, Id productId, Integer quantity, String description, Integer enteredPrice,  Id parentQuoteLineId) {
-        try {
-
-            Id standardPricebookId = [SELECT Id FROM Pricebook2 WHERE IsStandard = TRUE].Id;
-            System.debug('Standard Pricebook ID: ' + standardPricebookId);
-
-            Quote quote = [SELECT Id, Pricebook2Id FROM Quote WHERE Id =:quoteId LIMIT 1];
-            System.debug('Quote Pricebook2Id: ' + quote.Pricebook2Id);
-
-
-            if (quote.Pricebook2Id == null ) {
-                quote.Pricebook2Id = standardPricebookId;
-                update quote;
-            }
-
-            PricebookEntry pbe = [SELECT Id, Name, UnitPrice FROM PricebookEntry WHERE
-                    Product2Id = :productId
-                    AND Pricebook2Id =:quote.Pricebook2Id LIMIT 1];
-
-            System.debug('PricebookEntry ID: ' + pbe.Id);
-
-            QuoteLineItem ql = new QuoteLineItem();
-            ql.Product2Id = productId;
-            ql.QuoteId = quoteId;
-            ql.Quantity = quantity;
-            ql.Description = description;
-            ql.PricebookEntryId = pbe.Id;
-            ql.UnitPrice = enteredPrice;
-            if (parentQuoteLineId!=null) {
-                ql.Parent_Quote_Line_Item__c = parentQuoteLineId;
-            }
-            insert ql;
-        }
-        catch (Exception e) {
-            System.debug('Error inserting Quote Line' + e.getMessage());
-            throw new AuraHandledException('Error inserting Quote Line Item: ' + e.getMessage());
-        }
-    }
-
-    @AuraEnabled
-    public static PricebookEntry getNewQuoteLineItem(Id productId) {
-        try {
-            PricebookEntry pbe = [SELECT Id, Name, UnitPrice FROM PricebookEntry WHERE Product2Id = :productId LIMIT 1];
-            return pbe;
-        }
-        catch (Exception e) {
-            throw new AuraHandledException('Error retrieving Quote Line Item: ' + e.getMessage());
-        }
-    }
 
     @AuraEnabled
     public static Map<String, String> getFieldTypes(List<QuoteLineItem> selectedQuoteLines) {
@@ -128,16 +157,6 @@ public with sharing class QuoteLineController {
         return fieldTypeMap;
     }
 
-    @AuraEnabled(Cacheable=true)
-    public static List<String> getPicklistValues(String fieldName) {
-        List<String> picklistValues = new List<String>();
-        Schema.DescribeFieldResult fieldResult = Schema.SObjectType.QuoteLineItem.fields.getMap().get(fieldName).getDescribe();
-        for (Schema.PicklistEntry entry : fieldResult.getPicklistValues()) {
-            picklistValues.add(entry.getLabel());
-        }
-        return picklistValues;
-    }
-
     public class OrderComparator implements Comparator<sObject> {
         public Integer compare(SObject param1, SObject param2) {
             Decimal orderA = (Decimal) param1.get('Order__c');
@@ -145,6 +164,21 @@ public with sharing class QuoteLineController {
 
             if (orderA == orderB) return 0;
             return orderA > orderB ? 1 : -1;
+        }
+    }
+
+    public class QuoteLineWrapperClass {
+        @AuraEnabled
+        public QuoteLineItem quoteLine;
+        @AuraEnabled
+        public Map<String, String> labels;
+        @AuraEnabled
+        public Map<String, String> fieldTypes;
+
+        public QuoteLineWrapperClass(QuoteLineItem quoteLine, Map<String, String> labels, Map<String, String> fieldTypes) {
+            this.quoteLine = quoteLine;
+            this.labels = labels;
+            this.fieldTypes = fieldTypes;
         }
     }
 }

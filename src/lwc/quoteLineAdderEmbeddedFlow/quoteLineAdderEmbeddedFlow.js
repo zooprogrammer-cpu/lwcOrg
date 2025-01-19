@@ -5,9 +5,8 @@
 import {LightningElement, api, wire, track} from 'lwc';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import {ShowToastEvent} from "lightning/platformShowToastEvent";
-import getQuoteLineItems from "@salesforce/apex/QuoteLineController.getQuoteLineItems";
+import fetchQuoteLineDetails from "@salesforce/apex/QuoteLineController.fetchQuoteLineDetails";
 import deleteQuoteLineItems from "@salesforce/apex/QuoteLineController.deleteQuoteLineItem";
-import getNewQuoteLineItem from "@salesforce/apex/QuoteLineController.getNewQuoteLineItem";
 import getFieldTypes from "@salesforce/apex/QuoteLineController.getFieldTypes";
 import getCustomMetadata from "@salesforce/apex/CustomMetadataService.getCustomMetadata";
 import {startQuoteLineOrganization} from "c/quoteLineService";
@@ -33,37 +32,26 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
   isShowFlow = false;
   addProductLabel = 'Add Product';
 
-  async handleChange(event) {
-    // console.log('event', event);
-    this.selectedProduct2Id =event.detail.recordId;
-    // console.log("---this.selectedProduct2Id : ", this.selectedProduct2Id );
-
-    if (this.selectedProduct2Id) {
-      this.disableAddProduct = false;
-      const result = await getNewQuoteLineItem({productId: this.selectedProduct2Id});
-      this.itemPrice = result.UnitPrice;
-    }
-  }
-
-  @wire(getQuoteLineItems, {quoteId: '$recordId'})
+  @wire(fetchQuoteLineDetails, ({objectApiName: 'QuoteLineItem', fieldSetName: 'Dynamic_Field_Set', customLimit: 10, quoteId: '$recordId'}))
   async handleList(wiredResult) {
     this.wiredResult = wiredResult;
     let quoteLines = [];
     this.quoteLineGroupingArray = [];
     if (wiredResult.data) {
-      // console.log('wiredResult.data: ', wiredResult.data);
+      console.log('wiredResult.data: ', wiredResult.data);
       wiredResult.data.forEach((ql)=>{
         // console.log('each quote line: ', ql);
         let customizedQuoteLine = customizeObjectKeys(ql);
         quoteLines.push(customizedQuoteLine);
       })
       // console.log('quoteLines::', JSON.stringify(quoteLines));
-      this.allFieldTypes = await this.getAllFieldTypes(wiredResult.data);
-      console.log('this.allFieldTypes: ', JSON.stringify(this.allFieldTypes));
-      this.fieldLabelMap = await this.getAllFieldLabels(wiredResult.data);
-      console.log('this.fieldLabelMap: ', JSON.stringify(this.fieldLabelMap));
+      // this.allFieldTypes = await this.getAllFieldTypes(wiredResult.data);
+      // console.log('this.allFieldTypes: ', JSON.stringify(this.allFieldTypes));
+      // this.fieldLabelMap = await this.getAllFieldLabels(wiredResult.data);
+      // console.log('this.fieldLabelMap: ', JSON.stringify(this.fieldLabelMap));
     }
     this.quoteLineGroupingArray = startQuoteLineOrganization(quoteLines);
+    console.log('this.quoteLineGroupingArray' ,JSON.stringify(this.quoteLineGroupingArray));
     // console.log('allFieldTypes::', JSON.stringify(this.allFieldTypes));
   }
 
@@ -272,32 +260,6 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
     }
     return 'STRING'; //default
   }
-
-  // async  getAllFieldTypes(quoteLines) {
-  //   if (quoteLines) {
-  //     console.log('quoteLines in getAllFieldTypes', quoteLines);
-  //     let selected =[];
-  //     const filteredQuoteLines = quoteLines.map(ql => {
-  //       return Object.keys(ql).reduce((acc, key) => {
-  //         if (key !== 'Product2Id' && key !== 'Product2' && !key.includes('__r')) {
-  //           acc[key] = ql[key];
-  //         }
-  //         return acc;
-  //       }, {});
-  //     });
-  //
-  //     filteredQuoteLines.forEach(ql => {
-  //       Object.keys(ql).forEach(key => {
-  //         if (!selected.includes(key)) {
-  //           selected.push(key);
-  //         }
-  //       });
-  //     });
-  //     console.log('selectedFields: ' , JSON.stringify(selected));
-  //     return await getFieldTypes({selectedFields: selected});
-  //     // return null;
-  //   }
-  // }
 
   async  getAllFieldTypes(quoteLines) {
     if (quoteLines) {

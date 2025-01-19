@@ -1,6 +1,6 @@
 public with sharing class DynamicQuoteLineItemFieldSetController {
     @AuraEnabled(Cacheable = true)
-    public static List<Map<String, Object>> fetchFieldSet(String objectApiName, String fieldSetName, Integer customLimit, Id quoteId) {
+    public static List<QuoteLineItem> fetchFieldSet(String objectApiName, String fieldSetName, Integer customLimit, Id quoteId) {
         // Get the field set definition for the specified field set on the specified object
         Schema.DescribeSObjectResult objectDescribe = Schema.getGlobalDescribe().get(objectApiName).getDescribe();
         Schema.FieldSet fieldSet = objectDescribe.fieldSets.getMap().get(fieldSetName);
@@ -9,8 +9,16 @@ public with sharing class DynamicQuoteLineItemFieldSetController {
         // Build a dynamic query SOQL query using the fields in the field set
         String query = 'SELECT Id, Product2.Name, ';
         for (Schema.FieldSetMember field : fieldSet.getFields()) {
-            if (field.getType() == Schema.DisplayType.Reference) {
-                query += field.getFieldPath().replace('__c', '__r.Name') + ', ';
+//            if (field.getType() == Schema.DisplayType.Reference) {
+//                query += field.getFieldPath().replace('__c', '__r.Name') + ', ';
+//            } else {
+//                query += field.getFieldPath() + ', ';
+//            }
+            System.debug('Field:: ' + field.getType());
+            if (field.getType() == Schema.DisplayType.Reference && field.getFieldPath() != 'Product2Id') {
+                System.debug('Reference field: + ' + field);
+                System.debug('Reference field path: ' + field.getFieldPath());
+                query += field.getLabel() + '__r.Name' + ', ';
             } else {
                 query += field.getFieldPath() + ', ';
             }
@@ -24,19 +32,21 @@ public with sharing class DynamicQuoteLineItemFieldSetController {
         }
 
         System.debug('query::' + query);
+        List<QuoteLineItem> results = Database.query(query);
+        return results;
 
         // Execute the query
-        List<Map<String, Object>> results = new List<Map<String, Object>>();
-        for (SObject record : Database.query(query)) {
-            Map<String, Object> row = new Map<String, Object>();
-            for (Schema.FieldSetMember field: fieldSet.getFields()) {
-                row.put(field.getFieldPath(), record.get(field.getFieldPath()));
-            }
-            // Add Product2.Name to the row map
-            row.put('Product2.Name', record.getSObject('Product2').get('Name'));
-            row.put('Id', record.Id );
-            results.add(row);
-        }
-        return results;
+//        List<Map<String, Object>> results = new List<Map<String, Object>>();
+//        for (SObject record : Database.query(query)) {
+//            Map<String, Object> row = new Map<String, Object>();
+//            for (Schema.FieldSetMember field: fieldSet.getFields()) {
+//                row.put(field.getFieldPath(), record.get(field.getFieldPath()));
+//            }
+//            // Add Product2.Name to the row map
+//            row.put('Product2.Name', record.getSObject('Product2').get('Name'));
+//            row.put('Id', record.Id );
+//            results.add(row);
+//        }
+//        return results;
     }
 }

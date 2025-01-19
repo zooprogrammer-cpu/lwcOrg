@@ -1,0 +1,14 @@
+<!--
+ - Created by ashbas on 1/13/25.
+ -->
+
+<!-- Flow In Lwc -->
+<template>
+    <lightning-card>
+        <lightning-input label="First name" class="slds-m-around_medium" data-name="firstName"></lightning-input>
+        <lightning-input label="Last name" class="slds-m-around_medium" data-name="lastName"></lightning-input>
+        <lightning-button label="Show Flow" class="slds-m-around_medium" onclick = {showFlowHandler}></lightning-button>
+
+        <lightning-flow flow-api-name="Embedded_Flow_in_LWC" flow-input-variables={flowVariables} if:true={isShowFlow}></lightning-flow>
+    </lightning-card>
+</template>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>59.0</apiVersion>
-    <description>Embed Flow To Lwc</description>
+    <apiVersion>62.0</apiVersion>
+    <description>Flow In Lwc</description>
     <isExposed>true</isExposed>
+    <masterLabel>Flow In Lwc</masterLabel>
     <targets>
-        <target>lightning__RecordPage</target>
-        <target>lightning__HomePage</target>
         <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__RecordPage</target>
     </targets>
-    <masterLabel>Embed Flow To Lwc</masterLabel>
 </LightningComponentBundle>

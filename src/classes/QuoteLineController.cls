@@ -108,15 +108,34 @@ public with sharing class QuoteLineController {
     }
 
     @AuraEnabled
-    public static Map<String, String> getFieldTypes(List<String> selectedFields) {
+    public static Map<String, String> getFieldTypes(List<QuoteLineItem> selectedQuoteLines) {
         String objectName = 'QuoteLineItem';
         Map<String, String> fieldTypeMap = new Map<String, String>();
 
-        for(String field : selectedFields){
-            Schema.DisplayType fieldType = Schema.getGlobalDescribe().get(objectName).getDescribe().fields.getMap().get(field).getDescribe().getType();
-            fieldTypeMap.put(field, String.valueOf(fieldType));
+        // Get the describe result for the QuoteLineItem object
+        Map<String, Schema.SObjectField> fieldMap = Schema.getGlobalDescribe().get(objectName).getDescribe().fields.getMap();
+
+        // Iterate over the fields in the selectedQuoteLines
+        for (QuoteLineItem qli : selectedQuoteLines) {
+            for (String fieldName : qli.getPopulatedFieldsAsMap().keySet()) {
+                if (fieldMap.containsKey(fieldName)) {
+                    Schema.DisplayType fieldType = fieldMap.get(fieldName).getDescribe().getType();
+                    fieldTypeMap.put(fieldName, String.valueOf(fieldType));
+                }
+            }
         }
+
         return fieldTypeMap;
+    }
+
+    @AuraEnabled(Cacheable=true)
+    public static List<String> getPicklistValues(String fieldName) {
+        List<String> picklistValues = new List<String>();
+        Schema.DescribeFieldResult fieldResult = Schema.SObjectType.QuoteLineItem.fields.getMap().get(fieldName).getDescribe();
+        for (Schema.PicklistEntry entry : fieldResult.getPicklistValues()) {
+            picklistValues.add(entry.getLabel());
+        }
+        return picklistValues;
     }
 
     public class OrderComparator implements Comparator<sObject> {

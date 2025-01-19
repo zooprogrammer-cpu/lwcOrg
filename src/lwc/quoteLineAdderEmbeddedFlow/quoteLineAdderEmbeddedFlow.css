@@ -1,0 +1,12 @@
+/**
+ * Created by ashbas on 1/17/25.
+ */
+
+.accordionClass {
+    --sds-c-accordion-heading-font-size: 0.75rem;
+}
+
+.hover-highlight:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s;
+}

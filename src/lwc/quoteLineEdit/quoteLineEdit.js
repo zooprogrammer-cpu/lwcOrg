@@ -3,20 +3,15 @@
  */
 
 import {LightningElement, api, track, wire} from 'lwc';
-import {ShowToastEvent} from "lightning/platformShowToastEvent";
 import {refreshApex} from "@salesforce/apex";
 import {RefreshEvent} from "lightning/refresh";
-import getNewQuoteLineItem from "@salesforce/apex/QuoteLineController.getNewQuoteLineItem";
 import getQuoteLineItems from "@salesforce/apex/QuoteLineController.getQuoteLineItems";
 
-export default class QuoteLineInsertChild extends LightningElement {
+export default class QuoteLineEdit extends LightningElement {
   @api parentQuoteLineId;
   @api recordId;
   @track isLoading = false;
   wiredResult;
-  selectedRecordId = '';
-  disableAddProduct = true;
-  itemPrice;
   @api quoteLineGroupingFromParent;
   currentQuoteLine;
   @track allFieldTypes;
@@ -30,6 +25,7 @@ export default class QuoteLineInsertChild extends LightningElement {
   connectedCallback() {
     this.currentQuoteLine = this.quoteLineGroupingFromParent.qlRecordId;
     console.log('this.currentQuoteLine::', this.currentQuoteLine);
+
   }
 
   handleStatusChange(event) {
@@ -48,7 +44,7 @@ export default class QuoteLineInsertChild extends LightningElement {
         value: this.recordId
       },
       {
-        name : "parentQuoteLineId",
+        name : "currentQuoteLineId",
         type : "String",
         value: this.currentQuoteLine
       }
@@ -57,19 +53,6 @@ export default class QuoteLineInsertChild extends LightningElement {
 
   get flowName() {
     return "Quote_Line_Generator_with_Screen_Flow";
-  }
-
-  async handleChange(event) {
-    // console.log('event', event);
-    this.selectedRecordId =event.detail.recordId;
-    // console.log("---this.selectedRecordId : ", this.selectedRecordId );
-
-    if (this.selectedRecordId) {
-      this.disableAddProduct = false;
-      const result = await getNewQuoteLineItem({productId: this.selectedRecordId});
-      this.itemPrice = result.UnitPrice;
-      // console.log('The price is: ', this.itemPrice);
-    }
   }
 
   fetchUpdatedQuoteLineItems() {

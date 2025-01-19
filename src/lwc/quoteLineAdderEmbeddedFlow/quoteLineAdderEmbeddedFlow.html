@@ -1,0 +1,190 @@
+<!--
+ - Created by ashbas on 10/21/24.
+ -->
+
+<!-- Quote Line Generator -->
+<template>
+    <lightning-card>
+        <div class="slds-text-heading_medium slds-align_absolute-center">Add Products</div>
+        <lightning-button label={addProductLabel} class="slds-m-around_medium" onclick = {showFlowHandler}></lightning-button>
+        <lightning-flow flow-api-name={flowName} flow-input-variables={inputVariables} if:true={isShowFlow} onstatuschange={handleStatusChange}></lightning-flow>
+        <lightning-flow flow-api-name={editFlowName} flow-input-variables={inputVariables} if:true={isShowEditFlow} onstatuschange={handleEditFlowStatusChange}></lightning-flow>
+<!--        <lightning-button label="Refresh" class="slds-m-around_xx-small" onclick = {refreshHandler}></lightning-button>-->
+        <div class="slds-p-around_medium slds-m-top_medium">
+            <template lwc:if={preparedQuoteLines.length}>
+                <template for:each={preparedQuoteLines} for:item="ql">
+                    <div class="slds-box slds-grid" key={ql.Id}>
+                        <div class="slds-col slds-m-around_xx-small slds-size_9-of-12">
+                            <div class="slds-wrap">
+                                <template for:each={ql.firstTwoFields} for:item="field">
+                                    <div key={field.label}>
+                                        <h2>
+                                            {field.label}:&nbsp;
+                                            <template lwc:if={field.isCurrency}>
+                                                <lightning-formatted-number value={field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                            </template>
+                                            <template lwc:else>
+                                                {field.value}
+                                            </template>
+                                        </h2>
+                                    </div>
+                                </template>
+                            </div>
+                            <template lwc:if={ql.remainingFields.length}>
+                                <div class="slds-wrap">
+                                    <lightning-accordion allow-multiple-sections-open active-section-name="remaining items">
+                                        <lightning-accordion-section name="remaining" label="More Details" class="accordionClass">
+                                            <template for:each={ql.remainingFields} for:item="field">
+                                                <div key={field.label}>
+                                                    <h2>
+                                                        {field.label}:&nbsp;
+                                                        <template lwc:if={field.isCurrency}>
+                                                            <lightning-formatted-number value={field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                        </template>
+                                                        <template lwc:else>
+                                                            {field.value}
+                                                        </template>
+                                                    </h2>
+                                                </div>
+                                            </template>
+                                        </lightning-accordion-section>
+                                    </lightning-accordion>
+                                </div>
+                            </template>
+                            <template lwc:if={ql.children.length}>
+                                <template for:each={ql.children} for:item="child">
+                                    <div class="slds-grid"  key={child.Id}>
+                                        <div class="slds-grid slds-p-around_xx-small slds-size_9-of-12">
+                                            <ul class="slds-p-horizontal_xx-small slds-list_dotted">
+                                                <li>
+                                                    <template for:each={child.firstTwoFields} for:item="field">
+                                                        <div key={field.label}>
+                                                            <h3>
+                                                                {field.label}:&nbsp;
+                                                                <template lwc:if={field.isCurrency}>
+                                                                    <lightning-formatted-number value={field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                                </template>
+                                                                <template lwc:else>
+                                                                    {field.value}
+                                                                </template>
+                                                            </h3>
+                                                        </div>
+                                                    </template>
+                                                    <template lwc:if={child.remainingFields.length}>
+                                                        <div class="slds-wrap">
+                                                            <lightning-accordion allow-multiple-sections-open active-section-name="remaining items">
+                                                                <lightning-accordion-section name="remaining" label="More Details"  class="accordionClass">
+                                                                    <template for:each={child.remainingFields} for:item="field">
+                                                                        <div key={field.label}>
+                                                                            <h2>
+                                                                                {field.label}:&nbsp;
+                                                                                <template lwc:if={field.isCurrency}>
+                                                                                    <lightning-formatted-number value={field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                                                </template>
+                                                                                <template lwc:else>
+                                                                                    {field.value}
+                                                                                </template>
+                                                                            </h2>
+                                                                        </div>
+                                                                    </template>
+                                                                </lightning-accordion-section>
+                                                            </lightning-accordion>
+                                                        </div>
+                                                    </template>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+                                            <lightning-icon
+                                                    icon-name='action:edit'
+                                                    alternative-text='Edit'
+                                                    size='x-small'
+                                                    title='Edit'
+                                                    data-id={child.Id}
+                                                    onclick={handleEditQuoteLineItem}
+                                                    class="hover-highlight"
+                                            >
+                                            </lightning-icon>
+                                        </div>
+                                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+                                            <lightning-icon
+                                                    icon-name="action:delete"
+                                                    data-id={child.Id}
+                                                    onclick={deleteQuoteLineItem}
+                                                    alternative-text="Delete"
+                                                    size="x-small"
+                                                    title="Delete"
+                                                    class="hover-highlight"
+                                            >
+                                            </lightning-icon>
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+                            <lightning-icon
+                                    icon-name='action:add_relationship'
+                                    alternative-text='Add Child'
+                                    size='x-small'
+                                    title='Add Child'
+                                    data-id={ql.Id}
+                                    class="hover-highlight"
+                                    onclick={handleClickAddChild}
+                            >
+                            </lightning-icon>
+                        </div>
+                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+                            <lightning-icon
+                                    icon-name='action:edit'
+                                    alternative-text='Edit'
+                                    size='x-small'
+                                    title='Edit'
+                                    data-id={ql.Id}
+                                    class="hover-highlight"
+                                    onclick={handleEditQuoteLineItem}
+                            >
+                            </lightning-icon>
+                        </div>
+                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+                            <lightning-icon
+                                    icon-name="action:delete"
+                                    data-id={ql.Id}
+                                    onclick={deleteQuoteLineItem}
+                                    alternative-text="Delete"
+                                    size="x-small"
+                                    title="Delete"
+                                    class="hover-highlight"
+                            >
+                            </lightning-icon>
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <template if:false={quoteLineGroupingArray}>
+                <p> No Quote Lines found for this quote</p>
+            </template>
+        </div>
+        <div slot="footer">
+            <lightning-button label="Close" variant="brand" onclick={closeQuickAction}></lightning-button>
+        </div>
+        <div class="slds-m-around_small">
+            <template if:true={showModal}>
+                <c-quote-line-insert-child
+                        record-id={recordId}
+                        quote-line-grouping-from-parent={quoteLineItemObject}
+                        onclose={closeHandler}>
+                </c-quote-line-insert-child>
+            </template>
+        </div>
+        <div class="slds-m-around_small">
+            <template if:true={showQuoteLineEditModal}>
+                <c-quote-line-edit
+                        record-id={recordId}
+                        quote-line-grouping-from-parent={quoteLineItemObject}
+                        onclose={closeEditHandler}>
+                </c-quote-line-edit>
+            </template>
+        </div>
+    </lightning-card>
+</template>

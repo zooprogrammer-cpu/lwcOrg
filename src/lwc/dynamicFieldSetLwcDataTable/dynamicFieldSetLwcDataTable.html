@@ -1,0 +1,20 @@
+<!--
+ - Created by ashbas on 1/14/25.
+ -->
+
+<!-- Dynamic Field Set Lwc Data Table -->
+<template>
+    <lightning-card title={title} icon-name="standard:account">
+        <div class= "slds-m-around_medium">
+            <lightning-input style="width: 100px" type="search"  label="Search" onchange={handleSearch}></lightning-input>
+        </div>
+        <div class="slds-scrollable">
+            <lightning-datatable
+                key-field="Name"
+                data = {data}
+                columns = {columns}
+            ></lightning-datatable>
+        </div>
+
+    </lightning-card>
+</template>

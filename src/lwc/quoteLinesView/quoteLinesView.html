@@ -1,0 +1,101 @@
+<!--
+ - Created by ashbas on 10/21/24.
+ -->
+
+<!-- Quote Lines View -->
+<template>
+    <lightning-card>
+        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+            <lightning-button
+                    onclick={handleRefresh}
+                    variant=neutral
+                    label="Refresh">
+            </lightning-button>
+        </div>
+        <div class="slds-p-around_medium slds-m-top_medium">
+            <template lwc:if={preparedQuoteLines.length}>
+                <template for:each={preparedQuoteLines} for:item="ql">
+                    <div class="slds-box slds-grid" key={ql.Id}>
+                        <div class="slds-col slds-m-around_xx-small slds-size_8-of-12">
+                            <div class="slds-wrap">
+                                <template for:each={ql.fields} for:item="field">
+                                    <div key={field.label}>
+                                        <h2 class="slds-text-heading_small">
+                                            {field.label}:&nbsp;
+                                            <template lwc:if = {field.isCurrency}>
+                                                <lightning-formatted-number value= {field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                            </template>
+                                            <template lwc:else>
+                                                {field.value}
+                                            </template>
+                                        </h2>
+                                    </div>
+                                </template>
+                            </div>
+                            <template lwc:if={ql.children.length}>
+                                <div class="slds-wrap">
+                                    <lightning-accordion allow-multiple-sections-open active-section-name="children items">
+                                        <lightning-accordion-section name="children" label="More Details">
+                                            <template for:each={ql.children} for:item="child">
+                                                <div key={child.Id}>
+                                                    <div class="slds-grid slds-p-around_x-small">
+                                                        <ul class="slds-p-horizontal_medium slds-list_dotted">
+                                                            <li>
+                                                                <template for:each={child.fields} for:item="field">
+                                                                    <div key={field.label}>
+                                                                        <h3 class="slds-text-heading_small">
+                                                                            {field.label}:&nbsp;
+                                                                            <template lwc:if = {field.isCurrency}>
+                                                                                <lightning-formatted-number value= {field.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                                            </template>
+                                                                            <template lwc:else>
+                                                                                {field.value}
+                                                                            </template>
+                                                                        </h3>
+                                                                    </div>
+                                                                </template>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </lightning-accordion-section>
+                                    </lightning-accordion>
+                                </div>
+                            </template>
+                        </div>
+
+                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+                            <lightning-button
+                                    data-id={ql.Id}
+                                    onclick={handleClickEdit}
+                                    label="Edit">
+                            </lightning-button>
+                        </div>
+                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+                            <lightning-button
+                                    data-id={ql.Id}
+                                    onclick={deleteQuoteLineItem}
+                                    label="Delete"
+                                    variant=destructive-text
+                            >
+                            </lightning-button>
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <template if:false={quoteLineGroupingArray}>
+                <p> No Quote Lines found for this quote</p>
+            </template>
+        </div>
+        <div class="slds-m-around_medium">
+            <template if:true={showModal}>
+                <c-quote-line-insert-child
+                        record-id={recordId}
+                        quote-line-grouping-from-parent={quoteLineItemObject}
+                        onclose={closeHandler}>
+                </c-quote-line-insert-child>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -3,8 +3,6 @@
     <lightning-card title="Custom Progress Bar">
         <template lwc:if={wiredRecord}>
             <div class="slds-m-around_medium">
-                <p>Status: {currentStep}</p>
-
                 <div class="slds-path">
                     <div class="slds-grid slds-path__track">
                         <div class="slds-grid slds-path__scroller-container">
@@ -12,9 +10,7 @@
                                 <div class="slds-path__scroller_inner">
                                     <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal" aria-labelledby="slds-path__stage-name">
                                         <template for:each={statusOptions} for:item="option">
-<!--                                            <li key={option.value} class="slds-path__item" role="presentation" class={option.class}>-->
                                             <li key={option.value}  role="presentation" class={option.class}>
-
                                             <a aria-selected={option.ariaSelected} class="slds-path__link" href="#" role="option" tabindex="0">
                                                     <span class="slds-path__stage">
                                                         <svg class="slds-icon slds-icon_x-small" aria-hidden="true">

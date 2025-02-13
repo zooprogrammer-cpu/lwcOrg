@@ -30,10 +30,19 @@ export default class CustomProgressBar extends LightningElement {
   }
 
   updateStatusOptions() {
+    let currentStepFound = false;
     this.statusOptions = this.statusOptions.map(option => {
+      let optionClass = 'slds-path__item slds-is-incomplete';
+      if (option.value === this.currentStep) {
+        optionClass = 'slds-path__item slds-is-current slds-is-active';
+        currentStepFound = true;
+      } else if (!currentStepFound) {
+        optionClass = 'slds-path__item slds-is-complete';
+      }
+
       return {
         ...option,
-        class: option.value === this.currentStep ? 'slds-path__item slds-is-current slds-is-active' : 'slds-path__item slds-is-incomplete',
+        class: optionClass,
         ariaSelected: option.value === this.currentStep ? 'true' : 'false'
       };
     });

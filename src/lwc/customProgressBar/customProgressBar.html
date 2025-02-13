@@ -2,6 +2,19 @@
 <template>
     <lightning-card title="Custom Progress Bar">
         <template lwc:if={wiredRecord}>
+            <lightning-progress-indicator
+                    current-step={currentStep}
+                    variant="base">
+                <template for:each={statusOptions} for:item="status">
+                    <lightning-progress-step
+                            key={status.value}
+                            label={status.label}
+                            value={status.value}>
+                    </lightning-progress-step>
+                </template>
+            </lightning-progress-indicator>
+
+
             <div class="slds-m-around_medium">
                 <div class="slds-path">
                     <div class="slds-grid slds-path__track">

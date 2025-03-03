@@ -4,31 +4,33 @@
 
 import {LightningElement, track, api} from 'lwc';
 
+const baseColumns = [
+  {
+    label: 'Description',
+    fieldName: 'description'
+  },
+  {
+    label: 'Room Type',
+    fieldName: 'roomType'
+  },
+  {
+    label: 'Wing',
+    fieldName: 'wing'
+  }
+
+];
+
 
 export default class DynamicColumnDataTable extends LightningElement {
-  @track roomRates =[];
   @track dataForDataTable;
+  @track columns = [...baseColumns];
   @api flowData;
   @track isLoading = false;
-  @track data;
-  @track columns = [
-    {
-      label: 'Description',
-      fieldName: 'description'
-    },
-    {
-      label: 'Room Type',
-      fieldName: 'roomType'
-    },
-    {
-      label: 'Wing',
-      fieldName: 'wing'
-    }
-
-  ];
+  @track parsedFlowData;
 
   async connectedCallback() {
     try {
+      // get this data from an async apex call. This is just sample data.
       this.data = [
         {
           description: 'King Room',
@@ -62,47 +64,63 @@ export default class DynamicColumnDataTable extends LightningElement {
         },
       ]
 
-      this.dataForDataTable = [];
-
-      // Extract unique dates
-      const uniqueDates = new Set();
-      this.data.forEach(item =>{
-        item.rateDetails.forEach(rate => {
-          uniqueDates.add(rate.date_z);
-        })
-      })
-
-      // Add date columns
-      uniqueDates.forEach(date => {
-        this.columns.push({
-          label: date,
-          fieldName: date
-        });
-      });
-
-      this.dataForDataTable = this.data.map(item=>{
-        const row = {
-          description : item.description,
-          roomType: item.roomType,
-          wing: item.wing
-        };
-        item.rateDetails.forEach(rate => {
-          row[rate.date_z] = rate.roomRate;
-        });
-        return row;
-      });
-
-
-      console.log('this.dataForDataTable: ' , JSON.stringify(this.dataForDataTable));
-
-
-
-
-
-      // console.log(JSON.stringify(this.dataForDataTable))
+      this.processAvailableRooms(this.data);
     } catch (error) {
       console.error('Error loading room rates: ', error);
     }
+  }
+
+  processAvailableRooms(availableRooms) {
+    // Reset columns to base columns on each page load
+    this.columns = [...baseColumns];
+    // Clear uniqueDates on each page load
+    const uniqueDates = new Set();
+
+    // Add id for data table
+    let availableRoomsWithId = availableRooms.map((obj, index)=>({
+      ...obj,
+      id : index + 1
+    }));
+
+    // Extract unique dates for columns
+    availableRooms.forEach(room=>{
+      room.rateDetails.forEach(rate => {
+        uniqueDates.add(rate.date_z);
+      });
+    });
+
+    console.log('uniqueDates: ', uniqueDates);
+    // Add unique dates to columns
+    uniqueDates.forEach(date => {
+      this.columns.push({
+        label : date,
+        fieldName: date,
+        initialWidth : 175
+      });
+    });
+
+    let dataForDataTableTemp = [];
+
+    availableRoomsWithId.forEach(el => {
+      let row = {
+        description : el.description,
+        roomType : el.roomType,
+        wing : el.wing,
+        id : el.id
+      };
+
+      el.rateDetails.forEach(rate => {
+        row[rate.date_z] = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(rate.roomRate);
+      });
+      dataForDataTableTemp.push(row);
+    })
+
+
+    this.dataForDataTable = [...dataForDataTableTemp];
+    console.log(JSON.stringify(this.dataForDataTable))
+
+
+
   }
 
 }

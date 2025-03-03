@@ -1,0 +1,19 @@
+<!--
+ - Created by ashbas on 3/2/25.
+ -->
+
+<!-- Dynamic Column Data Table -->
+<template>
+    <lightning-card title="Data Table with dynamic columns">
+        <div>
+            <template lwc:if={dataForDataTable}>
+                <lightning-datatable
+                        key-field="id"
+                        data={dataForDataTable}
+                        columns={columns}
+                        max-row-selection=1
+                ></lightning-datatable>
+            </template>
+        </div>
+    </lightning-card>
+</template>

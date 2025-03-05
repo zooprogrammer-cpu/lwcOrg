@@ -154,6 +154,12 @@ export default class DataTableWithFilter extends LightningElement {
     this.maxPrice = filters.maxPrice;
     this.minBedrooms = filters.minBedrooms;
     this.minBathrooms = filters.minBathrooms;
+
+    if (this.searchKey) {
+      this.dataForDataTable = this.dataForDataTable.filter(room => room.roomType.toLowerCase().includes(this.searchKey.toLowerCase()))
+    } else {
+      this.processAvailableRooms(this.data);
+    }
   }
 
 }

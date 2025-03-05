@@ -5,7 +5,7 @@
 import {LightningElement, api, track, wire} from 'lwc';
 import {refreshApex} from "@salesforce/apex";
 import {RefreshEvent} from "lightning/refresh";
-import fetchQuoteLineDetails from "@salesforce/apex/QuoteLineController.fetchQuoteLineDetails";
+import getQuoteLineItems from "@salesforce/apex/QuoteLineController.getQuoteLineItems";
 
 export default class QuoteLineInsertChild extends LightningElement {
   @api parentQuoteLineId;
@@ -20,7 +20,7 @@ export default class QuoteLineInsertChild extends LightningElement {
   @track allFieldTypes;
   isShowFlow = true;
 
-  @wire(fetchQuoteLineDetails, ({objectApiName: 'QuoteLineItem', fieldSetName: 'Dynamic_Field_Set', customLimit: 10, quoteId: '$recordId'}))
+  @wire(getQuoteLineItems, {quoteId: '$recordId'})
   async handleList(wiredResult) {
     this.wiredResult = wiredResult;
   }

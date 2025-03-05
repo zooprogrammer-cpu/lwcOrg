@@ -15,6 +15,7 @@ export class DatatableSorter {
     }
 
     sortBy(field, reverse) {
+        console.log('sortBy: ', field);
         return function (a, b) {
             a = a[field];
             b = b[field];

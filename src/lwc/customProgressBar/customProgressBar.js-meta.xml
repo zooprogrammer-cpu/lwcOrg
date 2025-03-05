@@ -9,5 +9,13 @@
         <target>lightning__FlowScreen</target>
         <target>lightning__RecordPage</target>
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="recordId" type="String" label="Id of the current record"/>
+            <property name="objectName" type="String" label="Name of the Object"/>
+            <property name="currentStep" type="String" label="Current Step" />
+            <property name="stepsString" type="String" label="Comma-separated Steps" />
+        </targetConfig>
+    </targetConfigs>
 
 </LightningComponentBundle>

@@ -1,47 +1,7 @@
-<!-- Custom Progress Bar -->
 <template>
-    <lightning-card title="Custom Progress Bar">
-        <template lwc:if={wiredRecord}>
-            <lightning-progress-indicator
-                    current-step={currentStep}
-                    variant="base">
-                <template for:each={statusOptions} for:item="status">
-                    <lightning-progress-step
-                            key={status.value}
-                            label={status.label}
-                            value={status.value}>
-                    </lightning-progress-step>
-                </template>
-            </lightning-progress-indicator>
-
-
-            <div class="slds-m-around_medium">
-                <div class="slds-path">
-                    <div class="slds-grid slds-path__track">
-                        <div class="slds-grid slds-path__scroller-container">
-                            <div class="slds-path__scroller">
-                                <div class="slds-path__scroller_inner">
-                                    <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal" aria-labelledby="slds-path__stage-name">
-                                        <template for:each={statusOptions} for:item="option">
-                                            <li key={option.value}  role="presentation" class={option.class}>
-                                            <a aria-selected={option.ariaSelected} class="slds-path__link" role="option" tabindex="0">
-                                                    <span class="slds-path__stage">
-                                                        <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
-                                                            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
-                                                        </svg>
-                                                        <span class="slds-assistive-text">Current Stage:</span>
-                                                    </span>
-                                                    <span class="slds-path__title">{option.label}</span>
-                                                </a>
-                                            </li>
-                                        </template>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <lightning-progress-indicator current-step={currentStepValue} type="path" variant="base">
+        <template for:each={steps} for:item="step">
+            <lightning-progress-step label={step.label} value={step.value} key={step.value} onclick={handleStepClick}></lightning-progress-step>
         </template>
-    </lightning-card>
+    </lightning-progress-indicator>
 </template>

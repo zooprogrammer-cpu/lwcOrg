@@ -1,50 +1,42 @@
-import { LightningElement, track, api, wire } from 'lwc';
-import { getFieldValue, getRecord } from "lightning/uiRecordApi";
-import STATUS_FIELD from '@salesforce/schema/Project__c.Status__c';
+import { LightningElement, api, track, wire} from 'lwc';
+import {FlowNavigationBackEvent, FlowNavigationNextEvent, FlowAttributeChangeEvent} from "lightning/flowSupport";
 
 export default class CustomProgressBar extends LightningElement {
+  @api currentStep;
+  @api stepsString;
   @api recordId;
-  @track statusOptions = [
-    { label: 'New', value: 'New' },
-    { label: 'In Progress', value: 'In Progress' },
-    { label: 'On Hold', value: 'On Hold' },
-    { label: 'Completed', value: 'Completed' },
-    { label: 'Failed', value: 'Failed' }
-  ];
+  @api objectName;
 
-  @track selectedStatus = '';
-  @track currentStep = '';
+  @track steps = [];
+  @track currentStepValue;
 
-  @wire(getRecord, {
-    recordId: '$recordId',
-    fields: [STATUS_FIELD]
-  })
-  wiredRecord({ error, data }) {
-    if (data) {
-      this.selectedStatus = getFieldValue(data, STATUS_FIELD);
-      this.currentStep = this.selectedStatus;
-      this.updateStatusOptions();
-    } else if (error) {
-      console.error(error);
-    }
+  connectedCallback() {
+    this.initializeSteps();
+    this.setCurrentStepValue();
   }
 
-  updateStatusOptions() {
-    let currentStepFound = false;
-    this.statusOptions = this.statusOptions.map(option => {
-      let optionClass = 'slds-path__item slds-is-incomplete';
-      if (option.value === this.currentStep) {
-        optionClass = 'slds-path__item slds-is-current slds-is-active';
-        currentStepFound = true;
-      } else if (!currentStepFound) {
-        optionClass = 'slds-path__item slds-is-complete';
-      }
-
-      return {
-        ...option,
-        class: optionClass,
-        ariaSelected: option.value === this.currentStep ? 'true' : 'false'
-      };
-    });
+  initializeSteps() {
+    this.steps = this.parseSteps(this.stepsString);
   }
+
+  parseSteps(stepsString) {
+    return stepsString.split(',').map((step, index) => ({
+      label: step.trim(),
+      value: `step-${index + 1}`
+    }));
+  }
+
+  setCurrentStepValue() {
+    this.currentStepValue = this.getStepValue(this.currentStep);
+  }
+
+  getStepValue(currentStepLabel) {
+    const step = this.steps.find(step => step.label === currentStepLabel);
+    return step ? step.value : '';
+  }
+
+  handleStepClick(event) {
+    event.preventDefault();
+  }
+
 }

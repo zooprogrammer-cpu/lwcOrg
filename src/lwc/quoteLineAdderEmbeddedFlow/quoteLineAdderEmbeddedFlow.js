@@ -5,8 +5,9 @@
 import {LightningElement, api, wire, track} from 'lwc';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import {ShowToastEvent} from "lightning/platformShowToastEvent";
-import fetchQuoteLineDetails from "@salesforce/apex/QuoteLineController.fetchQuoteLineDetails";
+import getQuoteLineItems from "@salesforce/apex/QuoteLineController.getQuoteLineItems";
 import deleteQuoteLineItems from "@salesforce/apex/QuoteLineController.deleteQuoteLineItem";
+import getNewQuoteLineItem from "@salesforce/apex/QuoteLineController.getNewQuoteLineItem";
 import getFieldTypes from "@salesforce/apex/QuoteLineController.getFieldTypes";
 import getCustomMetadata from "@salesforce/apex/CustomMetadataService.getCustomMetadata";
 import {startQuoteLineOrganization} from "c/quoteLineService";
@@ -31,8 +32,21 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
   fieldLabelMap;
   isShowFlow = false;
   addProductLabel = 'Add Product';
+  expandOrCollapseLabel = 'Expand all sections';
 
-  @wire(fetchQuoteLineDetails, ({objectApiName: 'QuoteLineItem', fieldSetName: 'Dynamic_Field_Set', customLimit: 10, quoteId: '$recordId'}))
+  async handleChange(event) {
+    // console.log('event', event);
+    this.selectedProduct2Id =event.detail.recordId;
+    // console.log("---this.selectedProduct2Id : ", this.selectedProduct2Id );
+
+    if (this.selectedProduct2Id) {
+      this.disableAddProduct = false;
+      const result = await getNewQuoteLineItem({productId: this.selectedProduct2Id});
+      this.itemPrice = result.UnitPrice;
+    }
+  }
+
+  @wire(getQuoteLineItems, {quoteId: '$recordId'})
   async handleList(wiredResult) {
     this.wiredResult = wiredResult;
     let quoteLines = [];
@@ -44,8 +58,13 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
         let customizedQuoteLine = customizeObjectKeys(ql);
         quoteLines.push(customizedQuoteLine);
       })
+      // console.log('quoteLines::', JSON.stringify(quoteLines));
+      this.allFieldTypes = await this.getAllFieldTypes(wiredResult.data);
+      this.fieldLabelMap = await this.getAllFieldLabels(wiredResult.data);
+      console.log('this.fieldLabelMap: ', JSON.stringify(this.fieldLabelMap));
     }
     this.quoteLineGroupingArray = startQuoteLineOrganization(quoteLines);
+    // console.log('allFieldTypes::', JSON.stringify(this.allFieldTypes));
   }
 
   showFlowHandler() {
@@ -55,16 +74,16 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
 
   handleStatusChange(event) {
     if (event.detail.status === "FINISHED") {
-      // console.log('Flow Interview Finished');
-      // console.log('Output Variables: ', JSON.stringify(event.detail));
+      console.log('Flow Interview Finished');
+      console.log('Output Variables: ', JSON.stringify(event.detail));
       this.fetchUpdatedQuoteLineItems();
     }
   }
 
   handleEditFlowStatusChange(event) {
     if (event.detail.status === "FINISHED") {
-      // console.log('Flow Interview Finished');
-      // console.log('Output Variables: ', JSON.stringify(event.detail));
+      console.log('Flow Interview Finished');
+      console.log('Output Variables: ', JSON.stringify(event.detail));
       this.fetchUpdatedQuoteLineItems();
     }
   }
@@ -103,6 +122,7 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
       this.isLoading = true;
       await deleteQuoteLineItems({quoteLineItemId : quoteLineItemId})
       this.showToast('Success', 'Product removed successfully', 'success');
+      console.log('Product removed successfully');
       this.fetchUpdatedQuoteLineItems();
       this.isLoading = false;
     }
@@ -180,92 +200,150 @@ export default class QuoteLineAdderEmbeddedFlow extends LightningElement {
     this.showQuoteLineEditModal = true;
   }
 
+  // Manipulate which fields to not display on the UI here
+  formatFieldsForDisplay(quoteLine) {
+    console.log('quoteLine 😭 ', JSON.stringify(quoteLine));
+
+    let fields = Object.keys(quoteLine)
+        .filter(key => key !== 'Product2'
+            && key !== 'Id'
+            && key !== 'Product2Id'
+            && key !== 'children'
+            && key !== 'Parent_Quote_Line_Item__c'
+            && key !== 'hasParentQuoteLineItem'
+            && !key.includes('__r')
+            //&& key !== 'Location__c'
+        )
+        .map(key => {
+          let isCurrency = this.getMatchingFieldType(key) === 'CURRENCY';
+          // return { label: key, value: quoteLine[key], isCurrency: isCurrency };
+          return { label: this.fieldLabelMap[key] || key, value: quoteLine[key], isCurrency: isCurrency };
+        });
+
+    if (quoteLine.Product2 && quoteLine.Product2.Name) {
+      fields.unshift({ label: 'Product Name', value: quoteLine.Product2.Name, isCurrency: false });
+    }
+
+    // if (quoteLine.Location__r) {
+    //   fields = fields.map(field => field.label === 'Location' ? { label: 'Location', value: quoteLine.Location__r.Name, isCurrency: false } : field);
+    // }
+
+    if (Object.keys(quoteLine).some(key => key.includes('__r'))) {
+      fields = fields.map(field => field.label === this.fieldLabelMap['Location__c'] ? { label: this.fieldLabelMap['Location__c'], value: quoteLine.Location__r.Name, isCurrency: false } : field);
+    }
+
+    // if (quoteLine.key.includes('__r')) {
+    //   fields = fields.map(field => field.label === 'Location' ? { label: 'Location', value: quoteLine.key.Name, isCurrency: false } : field);
+    // }
+
+    console.log('fields##', JSON.stringify(fields));
+    return fields;
+  }
+
   getFirstTwoFields(gFields) {
     let firstTwo = [];
 
     const firstField = gFields.find(el => el.label === "Product Name");
     firstTwo.push(firstField);
 
-    const secondField = gFields.find(el => el.label === "Quantity");
-    firstTwo.push(secondField);
+    // const secondField = gFields.find(el => el.label === "Quantity");
+    // firstTwo.push(secondField);
 
     return firstTwo;
   }
 
   getRemainingFields(gFields) {
-    return gFields.filter(el=> el.label !== "Product Name" && el.label!=="Quantity");
+    // return gFields.filter(el=> el.label !== "Product Name" && el.label!=="Quantity");
+    return gFields.filter(el=> el.label !== "Product Name");
   }
 
   get preparedQuoteLines() {
-    const preparedQLs = this.quoteLineGroupingArray.map(obj => {
-      const formattedFieldsForDisplay = this.formatFieldsForDisplay(obj);
+    const preparedQLs = this.quoteLineGroupingArray.map(ql => {
+      const formattedFieldsForDisplay = this.formatFieldsForDisplay(ql);
       console.log('formattedFieldsForDisplay: ' + JSON.stringify(formattedFieldsForDisplay));
 
       return {
-        ...obj.quoteLine, // Need this to have access to Id
-        firstTwoFields: this.getFirstTwoFields(formattedFieldsForDisplay),
+        ...ql, // Need this to have access to Id
+        firstFieldsToDisplay: this.getFirstTwoFields(formattedFieldsForDisplay),
         remainingFields : this.getRemainingFields(formattedFieldsForDisplay),
-        // children: obj.children.map(child => ({
-        //   ...child, // Need this to have access to Id
-        //   firstTwoFields: this.getFirstTwoFields(this.formatFieldsForDisplay(child)),
-        //   remainingFields : this.getRemainingFields(this.formatFieldsForDisplay(child))
-        // }))
+        children: ql.children.map(child => ({
+          ...child, // Need this to have access to Id
+          firstFieldsToDisplay: this.getFirstTwoFields(this.formatFieldsForDisplay(child)),
+          remainingFields : this.getRemainingFields(this.formatFieldsForDisplay(child))
+        }))
       };
     });
     console.log('preparedQLs: ', preparedQLs);
     return preparedQLs;
   }
 
-  // Manipulate which fields to not display on the UI here
-  formatFieldsForDisplay(obj) {
-    console.log('obj::' , JSON.stringify(obj));
-    let fields = [];
-
-    const quoteLine = obj.quoteLine;
-    const fieldTypes = obj.fieldTypes;
-    const labels = obj.labels;
-
-    for (let key in quoteLine) {
-      if (quoteLine.hasOwnProperty(key) && key !== 'Product2' && key !== 'Location__r') {
-        let isCurrency = fieldTypes[key] === 'CURRENCY';
-        fields.push({ label: labels[key] || key, value: quoteLine[key], isCurrency: isCurrency });
-      }
+  getMatchingFieldType(fieldName) {
+    if (this.allFieldTypes && this.allFieldTypes[fieldName]) {
+      return this.allFieldTypes[fieldName];
     }
-
-    if (quoteLine.Product2 && quoteLine.Product2.Name) {
-      fields.unshift({ label: 'Product Name', value: quoteLine.Product2.Name, isCurrency: false });
-    }
-
-    console.log('fields##', JSON.stringify(fields));
-    return fields;
+    return 'STRING'; //default
   }
 
-  // getMatchingFieldType(fieldName) {
-  //   if (this.allFieldTypes && this.allFieldTypes[fieldName]) {
-  //     return this.allFieldTypes[fieldName];
-  //   }
-  //   return 'STRING'; //default
-  // }
+  async  getAllFieldTypes(quoteLines) {
+    if (quoteLines) {
+      console.log('quoteLines in getAllFieldTypes', quoteLines);
+      let selected =[];
+      const filteredQuoteLines = quoteLines.map(ql => {
+        return Object.keys(ql).reduce((acc, key) => {
+          if (key !== 'Product2Id' && key !== 'Product2' && !key.includes('__r')) {
+            acc[key] = ql[key];
+          }
+          return acc;
+        }, {});
+      });
 
-  // async  getAllFieldTypes(quoteLines) {
-  //   if (quoteLines) {
-  //     const allFieldTypes = await getFieldTypes({selectedQuoteLines: quoteLines});
-  //     return allFieldTypes;
-  //     // return null;
-  //   }
-  // }
+      filteredQuoteLines.forEach(ql => {
+        Object.keys(ql).forEach(key => {
+          if (!selected.includes(key)) {
+            selected.push(key);
+          }
+        });
+      });
+      console.log('selectedFields: ' , JSON.stringify(selected));
+      return await getFieldTypes({selectedFields: selected});
+      // return null;
+    }
+  }
 
-  // async getAllFieldLabels(quoteLines) {
-  //   if (quoteLines) {
-  //     const getCustomMetadataResult = await getCustomMetadata ({customMetaDataName : 'Quote_Line_Item_Setting__mdt', customMetaDataRecordDevName : ''});
-  //     const fieldLabelMap = getCustomMetadataResult.reduce((map, obj) => {
-  //       map[obj.Field_API_Name__c] = obj.Display_Label__c;
-  //       return map;
-  //     }, {});
-  //
-  //     return fieldLabelMap;
-  //   }
-  // }
+  async getAllFieldLabels(quoteLines) {
+    if (quoteLines) {
+      const getCustomMetadataResult = await getCustomMetadata ({customMetaDataName : 'Quote_Line_Item_Setting__mdt', customMetaDataRecordDevName : ''});
+      const fieldLabelMap = getCustomMetadataResult.reduce((map, obj) => {
+        map[obj.Field_API_Name__c] = obj.Display_Label__c;
+        return map;
+      }, {});
+
+      return fieldLabelMap;
+    }
+  }
+
+  section = [];
+
+  expandAllSections() {
+    if (this.section.length === 0) {
+      this.section = ['first', 'remaining_items'];
+      this.expandOrCollapseLabel =   'Collapse All Sections';
+    }
+    else {
+      this.section = [];
+      this.expandOrCollapseLabel =   'Expand All Sections';
+    }
+  }
+
+  handleSectionToggle(event) {
+    console.log('event.detail:' , JSON.stringify(event.detail));
+    this.section = event.detail.openSections;
+    if (this.section.length !== 0) {
+      this.expandOrCollapseLabel = 'Collapse All Sections';
+    } else {
+      this.expandOrCollapseLabel = 'Expand all sections';
+    }
+  }
 
   closeQuickAction() {
     this.dispatchEvent(new CloseActionScreenEvent());

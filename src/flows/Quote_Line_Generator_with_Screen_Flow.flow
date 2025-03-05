@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>Assign_Current_Quote_Pricebook</name>
         <label>Assign Current Quote Pricebook</label>
@@ -498,7 +499,7 @@
             <isRequired>false</isRequired>
             <objectFieldReference>selectFieldsFromQuoteLineItem.Line_Type__c</objectFieldReference>
         </fields>
-        <nextOrFinishButtonLabel>Add/Update</nextOrFinishButtonLabel>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>

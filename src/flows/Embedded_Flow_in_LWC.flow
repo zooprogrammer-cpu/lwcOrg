@@ -14,7 +14,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -27,14 +27,14 @@
     <screens>
         <name>firstScreen</name>
         <label>firstScreen</label>
-        <locationX>176</locationX>
-        <locationY>134</locationY>
+        <locationX>417</locationX>
+        <locationY>182</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <fields>
             <name>displaytext</name>
-            <fieldText>&lt;p&gt;Your Full Name is : {!firstName}  {!lastName}&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;The reocordId is: {!recordId}&lt;/p&gt;&lt;p&gt;Your Full Name is : {!firstName}  {!lastName}&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <nextOrFinishButtonLabel>Done</nextOrFinishButtonLabel>
@@ -42,8 +42,8 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
-        <locationY>0</locationY>
+        <locationX>291</locationX>
+        <locationY>48</locationY>
         <connector>
             <targetReference>firstScreen</targetReference>
         </connector>
@@ -62,5 +62,12 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
     </variables>
 </Flow>

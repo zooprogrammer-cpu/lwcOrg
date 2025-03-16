@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customProperties>
+        <name>ScreenProgressIndicator</name>
+        <value>
+            <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;path&quot;}</stringValue>
+        </value>
+    </customProperties>
+    <environments>Default</environments>
+    <interviewLabel>Screen Flow with built in progress bar {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Screen Flow with built in progress bar</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <screens>
+        <name>First_Screen</name>
+        <label>First Screen</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Second_Screen</targetReference>
+        </connector>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+        <stageReference>
+            <elementReference>Contact_Info_Stage</elementReference>
+        </stageReference>
+    </screens>
+    <screens>
+        <name>Fourth_Screen</name>
+        <label>Fourth Screen</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+        <stageReference>
+            <elementReference>Order_Confirmation_Stage</elementReference>
+        </stageReference>
+    </screens>
+    <screens>
+        <name>Second_Screen</name>
+        <label>Second Screen</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Third_Screen</targetReference>
+        </connector>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+        <stageReference>
+            <elementReference>Order_Info_Stage</elementReference>
+        </stageReference>
+    </screens>
+    <screens>
+        <name>Third_Screen</name>
+        <label>Third Screen</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Fourth_Screen</targetReference>
+        </connector>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+        <stageReference>
+            <elementReference>Billing_Details_Stage</elementReference>
+        </stageReference>
+    </screens>
+    <stages>
+        <name>Billing_Details_Stage</name>
+        <isActive>true</isActive>
+        <label>Billing Details</label>
+        <stageOrder>30</stageOrder>
+    </stages>
+    <stages>
+        <name>Contact_Info_Stage</name>
+        <isActive>true</isActive>
+        <label>Contact Info</label>
+        <stageOrder>10</stageOrder>
+    </stages>
+    <stages>
+        <name>Order_Confirmation_Stage</name>
+        <isActive>true</isActive>
+        <label>Order Confirmation</label>
+        <stageOrder>40</stageOrder>
+    </stages>
+    <stages>
+        <name>Order_Info_Stage</name>
+        <isActive>true</isActive>
+        <label>Order Info</label>
+        <stageOrder>20</stageOrder>
+    </stages>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>First_Screen</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+</Flow>

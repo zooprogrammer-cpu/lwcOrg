@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <description>Pass Notes From Lwc To Flow</description>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="selectedNotesToFlow" type="String" label="Real notes from LWC"/>
+        </targetConfig>
+    </targetConfigs>
+    <masterLabel>Pass Notes From Lwc To Flow</masterLabel>
+</LightningComponentBundle>

@@ -1,0 +1,29 @@
+<!--
+ - Created by ashbas on 4/9/25.
+ -->
+
+<!-- Data Table With Disabled Rows -->
+<template>
+    <lightning-card title="Datatable with Disabled Rows">
+        <lightning-button
+                label="Trigger error"
+                class="triggerError"
+                onclick={triggerError}>
+        </lightning-button>
+        <div>
+            <lightning-datatable
+                    key-field="Id"
+                    data={data}
+                    columns={columns}
+                    selected-rows={selectedRows}
+                    onrowselection={handleRowSelect}
+                    errors={errors}>
+            >
+            </lightning-datatable>
+            <div>
+                Selected Row:
+                {selectedRows}
+            </div>
+        </div>
+    </lightning-card>
+</template>

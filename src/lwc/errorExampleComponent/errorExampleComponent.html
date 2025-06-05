@@ -1,0 +1,20 @@
+<template>
+    <lightning-card title="Error Logger Demo" icon-name="utility:bug">
+        <div class="slds-p-around_medium">
+            <lightning-button
+                    variant="destructive"
+                    label="Trigger Error"
+                    title="Simulate an error"
+                    onclick={simulateError}>
+            </lightning-button>
+
+            <template if:true={errorVisible}>
+                <c-error-display
+                        visible={errorVisible}
+                        error-message={errorMsg}
+                        stack-trace={errorStack}>
+                </c-error-display>
+            </template>
+        </div>
+    </lightning-card>
+</template>

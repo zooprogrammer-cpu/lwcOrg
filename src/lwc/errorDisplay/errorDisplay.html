@@ -1,0 +1,15 @@
+<template>
+    <div class="slds-var-m-vertical_small">
+        <span class="slds-text-color_destructive">
+            {errorMessage}.
+            <template lwc:if={stackTrace}>
+                <a onclick={handleShowDetailsClick}> Show details.</a>
+            </template>
+        </span>
+        <template lwc:if={viewDetails}>
+            <p class="slds-text-body_regular">
+                {stackTrace}
+            </p>
+        </template>
+    </div>
+</template>

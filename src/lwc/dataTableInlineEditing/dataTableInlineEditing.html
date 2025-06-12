@@ -1,0 +1,16 @@
+<!--
+ - Created by ashbas on 6/12/25.
+ -->
+
+<!-- Data Table Inline Editing -->
+<template>
+    <lightning-card title="Data Sorting in Lightning Datatable in LWC" icon-name="standard:contact" >
+        <lightning-datatable
+                key-field="Id"
+                columns={columns}
+                data={data}
+                draft-values={draftValues}
+                onsave={handleSave}>
+        </lightning-datatable>
+    </lightning-card>
+</template>

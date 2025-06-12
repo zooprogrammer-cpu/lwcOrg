@@ -1,7 +1,7 @@
 public with sharing class ContactController {
     @AuraEnabled(cacheable=true)
     public static List<Contact> getContactList(){
-        return [SELECT Id,Name, Title, Email FROM Contact];
+        return [SELECT Id,Name, FirstName, LastName, Title, Email FROM Contact];
     }
 
     @AuraEnabled

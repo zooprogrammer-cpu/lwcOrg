@@ -10,6 +10,11 @@ const COLUMNS = [
   { label: 'First Name', fieldName: 'FirstName', editable: true},
   { label: 'Last Name', fieldName: 'LastName', editable: true },
   { label: 'Email', fieldName: 'Email', editable: true },
+  {
+    type: 'action',
+    typeAttributes: { rowActions: [{ label: 'Select', name: 'select' }] }
+  }
+
 ];
 
 export default class DataTableInlineEditing extends LightningElement {
@@ -35,8 +40,9 @@ export default class DataTableInlineEditing extends LightningElement {
   // Handles the save event triggered by inline editing
   handleSave(event) {
     // Extract the draft values from the onsave event
+    console.log('event.detail', event.detail);
     this.draftValues = event.detail.draftValues;
-    //console.log(JSON.stringify(this.draftValues));
+    console.log('draftValues', JSON.stringify(this.draftValues));
 
     // Convert draft values into record input objects
     const recordInputs = this.draftValues.slice().map(draft => {
@@ -76,6 +82,15 @@ export default class DataTableInlineEditing extends LightningElement {
       });
     }catch(error){
       console.error(error);
+    }
+  }
+
+  handleRowAction(event) {
+    const actionName = event.detail.action.name;
+    const row = event.detail.row;
+    if (actionName === 'select') {
+      // Your logic here
+      console.log('Row selected:', row);
     }
   }
 }

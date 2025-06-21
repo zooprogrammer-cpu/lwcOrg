@@ -1,0 +1,28 @@
+<!--
+ - Created by ashbas on 6/21/25.
+ -->
+
+<!-- Infinite Scrolling Data Table -->
+<template>
+    <div style="height: 200px">
+        <lightning-card title="Infinite Scrolling DataTable" icon-name="custom:custom4">
+            <template lwc:if={accountRecords}>
+                <div style="height: 150px; overflow: auto;">
+                    <lightning-datatable
+                            key-field="Id"
+                            data={accountRecords}
+                            columns={columns}
+                            show-row-number-column="true"
+                            enable-infinite-loading="true"
+                            is-loading={isLoading}
+                            onloadmore={onLoadMore}
+                            onrowselection={handleRowSelect}>
+                    </lightning-datatable>
+                </div>
+            </template>
+            <template lwc:if={error}>
+                Error is {error}
+            </template>
+        </lightning-card>
+    </div>
+</template>

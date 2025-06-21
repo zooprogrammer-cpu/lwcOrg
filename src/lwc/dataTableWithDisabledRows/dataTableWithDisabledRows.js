@@ -14,7 +14,7 @@ const columns = [ { label: 'FirstName', fieldName: 'FirstName', sortable: "true"
 export default class DataTableWithDisabledRows extends LightningElement {
   data;
   columns = columns;
-  selectedRows;
+  selectedRows =[];
 
   @wire(getContacts)
   contacts(result) {

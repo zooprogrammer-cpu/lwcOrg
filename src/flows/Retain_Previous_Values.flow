@@ -14,6 +14,13 @@
                 <elementReference>var_textContent</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varSelectedDate</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varSelectedDate</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Second_screen</targetReference>
         </connector>
@@ -24,7 +31,7 @@
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
-    <description>checking text</description>
+    <description>checking date</description>
     <environments>Default</environments>
     <interviewLabel>Retain Previous Values {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Retain Previous Values</label>
@@ -68,6 +75,12 @@
                     <elementReference>var_textContent</elementReference>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>selectedDate</name>
+                <value>
+                    <elementReference>varSelectedDate</elementReference>
+                </value>
+            </inputParameters>
             <inputsOnNextNavToAssocScrn>ResetValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
@@ -100,7 +113,7 @@
         <allowPause>true</allowPause>
         <fields>
             <name>secondScreenDisplayText</name>
-            <fieldText>&lt;p&gt;This is the second screen.&lt;/p&gt;&lt;p&gt;{!var_textContent}&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;This is the second screen.&lt;/p&gt;&lt;p&gt;Text : {!var_textContent}&lt;/p&gt;&lt;p&gt;Date : {!varSelectedDate}&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>

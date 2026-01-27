@@ -1,0 +1,7 @@
+/**
+ * Created by ashbas on 5/20/25.
+ */
+.hover-highlight:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s;
+}

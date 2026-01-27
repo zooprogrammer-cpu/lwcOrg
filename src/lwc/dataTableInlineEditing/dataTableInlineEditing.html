@@ -4,15 +4,17 @@
 
 <!-- Data Table Inline Editing -->
 <template>
-    <lightning-card title="Data Sorting in Lightning Datatable in LWC" icon-name="standard:contact" >
-        <lightning-datatable
-                key-field="Id"
-                columns={columns}
-                data={data}
-                draft-values={draftValues}
-                onsave={handleSave}
-                onrowaction={handleRowAction}
-        >
-        </lightning-datatable>
-    </lightning-card>
+    <div style="height: 200px">
+        <lightning-card title="Data Sorting in Lightning Datatable in LWC" icon-name="standard:contact" >
+            <lightning-datatable
+                    key-field="Id"
+                    columns={columns}
+                    data={data}
+                    draft-values={draftValues}
+                    onsave={handleSave}
+                    onrowaction={handleRowAction}
+            >
+            </lightning-datatable>
+        </lightning-card>
+    </div>
 </template>

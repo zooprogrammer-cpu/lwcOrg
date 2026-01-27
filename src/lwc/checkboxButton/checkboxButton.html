@@ -1,0 +1,21 @@
+<template>
+    <lightning-card title="Select a Coach">
+        <div class="slds-box slds-m-around_medium">
+
+            <template if:true={coaches}>
+                <template for:each={coaches} for:item="coach">
+                    <lightning-input
+                            key={coach.salesforceUuid}
+                            type="checkbox-button"
+                            label={coach.coachName}
+                            name={coach.salesforceUuid}
+                            checked={selectedCoachId}
+                             data-id={coach.salesforceUuid}
+                            onchange={handleCoachSelection}>
+                    </lightning-input>
+                </template>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

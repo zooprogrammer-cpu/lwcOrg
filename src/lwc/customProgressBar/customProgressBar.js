@@ -17,6 +17,7 @@ export default class CustomProgressBar extends LightningElement {
 
   initializeSteps() {
     this.steps = this.parseSteps(this.stepsString);
+    console.log('this.steps:', this.steps);
   }
 
   parseSteps(stepsString) {
@@ -28,6 +29,7 @@ export default class CustomProgressBar extends LightningElement {
 
   setCurrentStepValue() {
     this.currentStepValue = this.getStepValue(this.currentStep);
+    console.log('currentStepValue', this.currentStepValue);
   }
 
   getStepValue(currentStepLabel) {
@@ -36,7 +38,30 @@ export default class CustomProgressBar extends LightningElement {
   }
 
   handleStepClick(event) {
-    event.preventDefault();
+    console.log('Step Clicked');
+    this.currentStep = event.target.value;
+    console.log('this.currentStep: ', this.currentStep );
+    // event.preventDefault();
+    this.handleNext();
+  }
+
+  @api availableActions = []; // Gives us the ability to know what actions are available in the flow
+
+  handleNext() {
+    // If we are already in the last screen, we don't want to do anything
+    if(this.availableActions.find((action)=> action === "NEXT")) {
+      const navigateNextEvent = new FlowNavigationNextEvent();
+      this.dispatchEvent(navigateNextEvent);
+    }
+  }
+
+  handleBack() {
+    // If we are already in the first screen, we don't want to do anything
+    if (this.availableActions.find((action)=> action === "BACK")) {
+      const navigateBackEvent = new FlowNavigationBackEvent();
+      this.dispatchEvent(navigateBackEvent);
+    }
+
   }
 
 }

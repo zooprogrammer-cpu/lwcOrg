@@ -1,0 +1,14 @@
+<!--
+ - Created by ashbas on 8/29/25.
+ -->
+
+<!-- Disconnected Callback Parent -->
+<template>
+    <lightning-card title="Disconnected callback Example">
+        <p>Parent LWC Component</p>
+        <lightning-button variant=brand label='show/hide' onclick={handleShowHide}></lightning-button>
+        <template if:true={show}>
+            <c-disconnected-callback-child ></c-disconnected-callback-child>
+        </template>
+    </lightning-card>
+</template>

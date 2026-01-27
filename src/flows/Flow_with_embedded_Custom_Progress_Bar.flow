@@ -2,6 +2,113 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Stage_1</name>
+        <label>Assign Stage 1</label>
+        <locationX>50</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>currentStage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>stage2</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Screen_Router</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Stage_2</name>
+        <label>Assign Stage 2</label>
+        <locationX>314</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>currentStage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>customProgressBar2.currentStep</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Screen_Router</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Stage_3</name>
+        <label>Assign Stage 3</label>
+        <locationX>578</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>currentStage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>customProgressBar3.currentStep</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Screen_Router</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Screen_Router</name>
+        <label>Screen Router</label>
+        <locationX>446</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>update_status</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>navigate_to_screen_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>currentStage</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>stage1</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>First_Screen</targetReference>
+            </connector>
+            <label>navigate to screen 1</label>
+        </rules>
+        <rules>
+            <name>navigate_to_screen_2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>currentStage</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>stage2</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Second_Screen</targetReference>
+            </connector>
+            <label>navigate to screen 2</label>
+        </rules>
+        <rules>
+            <name>navigate_to_screen_3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>currentStage</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>stage3</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Third_Screen</targetReference>
+            </connector>
+            <label>navigate to screen 3</label>
+        </rules>
+    </decisions>
+    <description>Added back and forward ability</description>
     <environments>Default</environments>
     <interviewLabel>Flow with embedded Custom Progress Bar {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Flow with embedded Custom Progress Bar</label>
@@ -27,11 +134,11 @@
     <recordLookups>
         <name>Get_project</name>
         <label>Get project</label>
-        <locationX>176</locationX>
+        <locationX>446</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>First_Screen</targetReference>
+            <targetReference>Screen_Router</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -48,8 +155,8 @@
     <recordUpdates>
         <name>update_status</name>
         <label>update status</label>
-        <locationX>176</locationX>
-        <locationY>566</locationY>
+        <locationX>842</locationX>
+        <locationY>350</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -69,16 +176,16 @@
     <screens>
         <name>First_Screen</name>
         <label>First Screen</label>
-        <locationX>176</locationX>
-        <locationY>242</locationY>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Second_Screen</targetReference>
+            <targetReference>Assign_Stage_1</targetReference>
         </connector>
         <fields>
-            <name>customProgressBar</name>
+            <name>customProgressBar1</name>
             <extensionName>c:customProgressBar</extensionName>
             <fieldType>ComponentInstance</fieldType>
             <inputParameters>
@@ -102,18 +209,47 @@
             <inputParameters>
                 <name>currentStep</name>
                 <value>
-                    <stringValue>New</stringValue>
+                    <stringValue>stage1</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>displayTextScreen1</name>
+            <fieldText>&lt;p&gt;Screen 1&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <fields>
             <fieldType>ObjectProvided</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>false</isRequired>
             <objectFieldReference>projectFields.Status__c</objectFieldReference>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -121,16 +257,16 @@
     <screens>
         <name>Second_Screen</name>
         <label>Second Screen</label>
-        <locationX>176</locationX>
+        <locationX>314</locationX>
         <locationY>350</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Third_Screen</targetReference>
+            <targetReference>Assign_Stage_2</targetReference>
         </connector>
         <fields>
-            <name>Copy_1_of_customProgressBar</name>
+            <name>customProgressBar2</name>
             <extensionName>c:customProgressBar</extensionName>
             <fieldType>ComponentInstance</fieldType>
             <inputParameters>
@@ -154,18 +290,47 @@
             <inputParameters>
                 <name>currentStep</name>
                 <value>
-                    <stringValue>Created</stringValue>
+                    <stringValue>stage2</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>displayScreen2</name>
+            <fieldText>&lt;p&gt;Screen 2&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <fields>
             <fieldType>ObjectProvided</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>false</isRequired>
             <objectFieldReference>projectFields.Status__c</objectFieldReference>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -173,16 +338,16 @@
     <screens>
         <name>Third_Screen</name>
         <label>Third Screen</label>
-        <locationX>176</locationX>
-        <locationY>458</locationY>
+        <locationX>578</locationX>
+        <locationY>350</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>update_status</targetReference>
+            <targetReference>Assign_Stage_3</targetReference>
         </connector>
         <fields>
-            <name>Copy_1_of_Copy_1_of_customProgressBar</name>
+            <name>customProgressBar3</name>
             <extensionName>c:customProgressBar</extensionName>
             <fieldType>ComponentInstance</fieldType>
             <inputParameters>
@@ -206,30 +371,69 @@
             <inputParameters>
                 <name>currentStep</name>
                 <value>
-                    <stringValue>Finished</stringValue>
+                    <stringValue>stage3</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>display_Screen3</name>
+            <fieldText>&lt;p&gt;Screen 3&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <fields>
             <fieldType>ObjectProvided</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>false</isRequired>
             <objectFieldReference>projectFields.Status__c</objectFieldReference>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
+        <locationX>320</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_project</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
+    <variables>
+        <name>currentStage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>stage1</stringValue>
+        </value>
+    </variables>
     <variables>
         <name>projectFields</name>
         <dataType>SObject</dataType>
@@ -237,6 +441,16 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Project__c</objectType>
+    </variables>
+    <variables>
+        <name>proressBarType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>horizontal</stringValue>
+        </value>
     </variables>
     <variables>
         <name>recordId</name>
@@ -252,7 +466,7 @@
         <isInput>true</isInput>
         <isOutput>true</isOutput>
         <value>
-            <stringValue>New,Created,Finished</stringValue>
+            <stringValue>stage1,stage2,stage3</stringValue>
         </value>
     </variables>
 </Flow>

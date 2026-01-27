@@ -1,5 +1,5 @@
 <template>
-    <lightning-card title="Flow in Lightning" icon-name="standard:orders">
+    <lightning-card title="Embed Flow To Lwc" icon-name="standard:orders">
         <div class="slds-m-around_medium">
             <template if:true={isPartner}>
                 <lightning-flow onstatuschange={handleStatusChange} flow-api-name="partnerFlow" flow-input-variables={inputVariables}></lightning-flow>

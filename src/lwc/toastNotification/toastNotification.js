@@ -29,7 +29,7 @@ export default class ToastNotification extends LightningElement {
                     label:'Click here'
                 }
             ],
-            mode:'sticky'
+            mode:'pester'
 
             
         })

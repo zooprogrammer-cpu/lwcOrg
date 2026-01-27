@@ -10,7 +10,7 @@ public with sharing class AccountListController {
 
         if (intOffset !=null) {
             listAccounts = [SELECT Id, Name, Industry, AccountNumber
-            FROM Account LIMIT 5 OFFSET : Integer.valueOf(intOffset)];
+            FROM Account LIMIT 10 OFFSET : Integer.valueOf(intOffset)];
         }
         System.debug('listOfAccounts is:: ' + listAccounts);
 

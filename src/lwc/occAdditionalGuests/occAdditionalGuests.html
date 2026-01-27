@@ -1,0 +1,59 @@
+<!--
+ - Created by ashbas on 5/20/25.
+ -->
+
+<!-- Occ Additional Guests -->
+<template>
+    <lightning-card title="Additional Guests">
+        <div class="slds-p-around_medium slds-m-top_medium">
+            <template lwc:if={additionalGuests}>
+                <template for:each={additionalGuests} for:item="guest">
+                    <div class="slds-grid" key={guest}>
+                        <div class="slds-col slds-m-around_xx-small slds-size_8-of-12">
+
+                                       <lightning-input label="Additional Guest" type="text" value={guest} variant="label-hidden"  ></lightning-input>
+
+                        </div>
+<!--                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">-->
+<!--                            <lightning-icon-->
+<!--                                    icon-name='action:add_relationship'-->
+<!--                                    alternative-text='Add Child'-->
+<!--                                    size='x-small'-->
+<!--                                    title='Add Child'-->
+<!--                                    class="hover-highlight"-->
+<!--                                    onclick={handleClickAddGuest}-->
+<!--                            >-->
+<!--                            </lightning-icon>-->
+<!--                        </div>-->
+<!--                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">-->
+<!--                            <lightning-icon-->
+<!--                                    icon-name='action:edit'-->
+<!--                                    alternative-text='Edit'-->
+<!--                                    size='x-small'-->
+<!--                                    title='Edit'-->
+<!--                                    class="hover-highlight"-->
+<!--                                    onclick={handleClickEditGuest}-->
+<!--                            >-->
+<!--                            </lightning-icon>-->
+<!--                        </div>-->
+                        <div class="slds-col slds-m-around_xx-small slds-size_1-of-12">
+                            <lightning-icon
+                                    icon-name="action:delete"
+                                    onclick={handleClickDeleteGuest}
+                                    alternative-text="Delete"
+                                    size="x-small"
+                                    title="Delete"
+                                    class="hover-highlight"
+                            >
+                            </lightning-icon>
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <div slot="footer">
+                <lightning-button label="Add Guest" variant="brand" onclick={handleClickAddGuest}></lightning-button>
+            </div>
+        </div>
+
+    </lightning-card>
+</template>

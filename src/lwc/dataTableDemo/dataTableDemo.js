@@ -52,7 +52,7 @@ export default class DataTableDemo extends LightningElement {
         // renderedCallback is dengerous since it reloads anytime enything changes.this means the current component.
         // return immediately if Css is loaded an will not execute the rest of the code.c/accountCreator
         // if css is not laoded,  set it to true. 
-        if(this,this.isCssLoaded) return
+        if(this.isCssLoaded) return
         this.isCssLoaded = true  
         loadStyle(this, COLORS).then(()=>{
             console.log("loaded successfully")

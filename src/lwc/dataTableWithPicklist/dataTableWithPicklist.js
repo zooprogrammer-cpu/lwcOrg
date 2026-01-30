@@ -13,7 +13,7 @@ const COLUMNS = [
       class:{fieldName:'amountColor'},
       iconName : {fieldName: 'iconName'}, iconPosition:'right'
     }},
-  {label:'Industry', fieldName:'Industry', type:'industryPicklist',
+  {label:'Industry', fieldName:'Industry', type:'industryPicklist', wrapText: true,
     typeAttributes:{
       options:{fieldName:'picklistOptions'},
       value:{fieldName:'Industry'},

@@ -12,14 +12,14 @@
                     <label class="slds-form-element__label slds-text-title_bold"
                            for="text-input-height">Height(cm)</label>
                     <div class="slds-form-element__control">
-                        <input type="number" id="text-input-height" min="0" placeholder="Enter your height in cm" required="" class="slds-input" />
+                        <input type="number" id="text-input-height" min="0" placeholder="Enter your height in cm" onchange={handleHeightChange} required="" class="slds-input" />
                     </div>
                 </div>
                 <div class="slds-form-element">
                     <label class="slds-form-element__label slds-text-title_bold"
                            for="text-input-weight">Weight(kg)</label>
                     <div class="slds-form-element__control">
-                        <input type="number" id="text-input-weight" min="0" placeholder="Enter your weight in kg" required="" class="slds-input" />
+                        <input type="number" id="text-input-weight" min="0" placeholder="Enter your weight in kg" onchange={handleWeightChange} required="" class="slds-input" />
                     </div>
                 </div>
                 <button class="slds-button slds-button_neutral slds-button_stretch custom-button slds-var-m-bottom_large">Calculate</button>

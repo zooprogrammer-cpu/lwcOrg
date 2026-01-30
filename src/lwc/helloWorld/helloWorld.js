@@ -1,7 +1,12 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, api } from 'lwc';
 export default class HelloWorld extends LightningElement {
-  greeting = 'World';
-  changeHandler(event) {
-    this.greeting = event.target.value;
+  @api objectApiName;
+
+  get computedClassNames() {
+    return [
+      "slds-box",
+      "slds-theme_alert-texture",
+      this.objectApiName === 'Account' ? "slds-theme_shade" : "slds-theme_success"
+    ];
   }
 }

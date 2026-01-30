@@ -1,0 +1,38 @@
+<!--
+ - Created by ashbas on 10/3/25.
+ -->
+
+<!-- Custom Progress Trackable -->
+<template>
+    <lightning-card title="Progress Wizard">
+        <div class="slds-p-around_medium">
+            <lightning-progress-indicator
+                    current-step={currentStep}
+                    type="path"
+                    variant="base"
+            >
+                <template for:each={steps} for:item="step">
+                    <lightning-progress-step
+                            key={step.value}
+                            label={step.label}
+                            value={step.value}
+                            onclick={handleStepClick}>
+                    </lightning-progress-step>
+                </template>
+            </lightning-progress-indicator>
+        </div>
+
+        <!-- Example conditional screen rendering -->
+        <div class="slds-p-around_medium">
+            <template if:true={isStep1}>
+                <p>Welcome to Step 1 content.</p>
+            </template>
+            <template if:true={isStep2}>
+                <p>You are now in Step 2 screen.</p>
+            </template>
+            <template if:true={isStep3}>
+                <p>This is Step 3 screen.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

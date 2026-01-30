@@ -1,14 +1,10 @@
 <template>
     <lightning-card title="Datatable with Picklist">
-        <template if:true={tableData}>
-            <div>
-                    <lightning-datatable
-                            key-field="Id"
-                            data = {tableData}
-                            class="slds-max-medium-table_stacked-horizontal"
-                            columns = {columns}
-                    ></lightning-datatable>
-            </div>
-        </template>
+        <c-custom-types-global
+            key-field="Id"
+            data={tableData}
+            columns={columns}
+            show-row-number-column>
+        </c-custom-types-global>
     </lightning-card>
 </template>

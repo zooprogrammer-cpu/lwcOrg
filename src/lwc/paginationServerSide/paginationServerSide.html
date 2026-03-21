@@ -1,0 +1,39 @@
+<template>
+    <lightning-card title="Pagination Server Side" icon-name="standard:opportunity">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+        </template>
+
+        <div class="slds-p-around_medium">
+            <lightning-datatable
+                    key-field="Id"
+                    data={data}
+                    columns={columns}
+                    hide-checkbox-column
+                    column-widths-mode="auto">
+            </lightning-datatable>
+
+            <div class="slds-grid slds-grid_align-spread slds-m-top_medium">
+                <div class="slds-col">
+                    <lightning-button
+                            label="Previous"
+                            onclick={handlePrevious}
+                            disabled={isFirstPage}
+                            variant="neutral">
+                    </lightning-button>
+                </div>
+                <div class="slds-col slds-text-align_center">
+                    <p class="slds-text-body_regular">{currentPageInfo}</p>
+                </div>
+                <div class="slds-col slds-text-align_right">
+                    <lightning-button
+                            label="Next"
+                            onclick={handleNext}
+                            disabled={isLastPage}
+                            variant="neutral">
+                    </lightning-button>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,62 @@
+.activity-feed {
+    font-family: var(--lwc-fontFamily, 'Salesforce Sans', Arial, sans-serif);
+}
+
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-item {
+    border-bottom: 1px solid var(--lwc-colorBorder, #dddbda);
+    padding: 0.75rem 0;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-header {
+    margin-bottom: 0.25rem;
+}
+
+/* ── Type badges ─────────────────────────────────────────────────── */
+.badge {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.badge_comment {
+    background-color: #f3e8fd;
+    color: #5a0fc8;
+}
+
+.badge_inbound {
+    background-color: #dff6e0;
+    color: #027e46;
+}
+
+.badge_outbound {
+    background-color: #e8f4fd;
+    color: #0070d2;
+}
+
+.badge_default {
+    background-color: #f3f2f2;
+    color: #3e3e3c;
+}
+
+/* ── Body text ───────────────────────────────────────────────────── */
+.activity-body {
+    white-space: pre-line;
+    word-break: break-word;
+    color: var(--lwc-colorTextDefault, #3e3e3c);
+    line-height: 1.5;
+}

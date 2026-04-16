@@ -1,0 +1,92 @@
+<template>
+    <lightning-card title="Case Activity Feed">
+        <div class="activity-feed">
+
+            <!-- Loading spinner -->
+            <template lwc:if={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner
+                            alternative-text="Loading activity…"
+                            size="medium">
+                    </lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Error state -->
+            <template lwc:elseif={hasError}>
+                <div class="slds-notify slds-notify_alert slds-theme_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <p>{errorMessage}</p>
+                </div>
+            </template>
+
+            <!-- Empty state -->
+            <template lwc:elseif={isEmpty}>
+                <div class="slds-illustration slds-illustration_small slds-p-around_large">
+                    <p class="slds-text-body_regular slds-text-color_weak">
+                        No activity found for this case.
+                    </p>
+                </div>
+            </template>
+
+            <!-- Activity items -->
+            <template lwc:elseif={hasItems}>
+                <ul class="activity-list slds-has-dividers_bottom-space">
+                    <template for:each={activityItems} for:item="item">
+                        <li key={item.recordId} class="activity-item slds-p-vertical_small">
+
+                            <!-- Header row -->
+                            <div class="activity-header slds-grid slds-grid_align-spread slds-wrap">
+
+                                <!-- Type badge + author -->
+                                <div class="slds-col slds-grid slds-grid_vertical-align-center slds-m-bottom_xx-small">
+                                <span class={item.badgeClass}>
+                                    {item.type}
+                                </span>
+                                    <span class="slds-m-left_x-small slds-text-body_small slds-text-color_weak">
+                                    {item.authorName}
+                                </span>
+                                </div>
+
+                                <!-- Date -->
+                                <div class="slds-col_bump-left slds-text-body_small slds-text-color_weak">
+                                    <lightning-formatted-date-time
+                                            value={item.activityDate}
+                                            year="numeric"
+                                            month="short"
+                                            day="2-digit"
+                                            hour="2-digit"
+                                            minute="2-digit">
+                                    </lightning-formatted-date-time>
+                                </div>
+                            </div>
+
+                            <!-- Subject (emails only) -->
+                            <template lwc:if={item.subject}>
+                                <p class="slds-text-body_small slds-text-title_caps slds-m-bottom_xx-small">
+                                    {item.subject}
+                                </p>
+                            </template>
+
+                            <!-- From address (emails only) -->
+                            <template lwc:if={item.fromAddress}>
+                                <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">
+                                    From: {item.fromAddress}
+                                </p>
+                            </template>
+
+                            <!-- Body -->
+                            <div class="activity-body slds-text-body_regular slds-m-top_xx-small">
+                                <lightning-formatted-text
+                                        value={item.body}
+                                        linkify>
+                                </lightning-formatted-text>
+                            </div>
+
+                        </li>
+                    </template>
+                </ul>
+            </template>
+        </div>
+    </lightning-card>
+</template>

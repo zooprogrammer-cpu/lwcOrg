@@ -1,0 +1,69 @@
+<template>
+    <lightning-card title="Cases by Status" icon-name="utility:chart">
+        <div class="slds-p-around_medium">
+
+            <!-- ── Count summary pill ──────────────────────────────────────────── -->
+            <div class="summary-row slds-m-bottom_medium">
+                <span class="summary-pill">
+                    <lightning-icon
+                        icon-name="utility:filter"
+                        size="xx-small"
+                        class="slds-m-right_xx-small">
+                    </lightning-icon>
+                    {selectedLabel}&nbsp;—&nbsp;<strong>{selectedCount}</strong>&nbsp;case(s)
+                </span>
+            </div>
+
+            <!-- ── Loading ─────────────────────────────────────────────────────── -->
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner
+                        alternative-text="Loading chart data"
+                        size="small">
+                    </lightning-spinner>
+                </div>
+            </template>
+
+            <!-- ── Error ───────────────────────────────────────────────────────── -->
+            <template if:true={hasError}>
+                <div class="slds-text-align_center slds-p-around_medium">
+                    <lightning-icon
+                        icon-name="utility:error"
+                        size="small"
+                        variant="error"
+                        class="slds-m-bottom_x-small">
+                    </lightning-icon>
+                    <p class="slds-text-color_error">Unable to load chart data.</p>
+                </div>
+            </template>
+
+            <!-- ── Bar chart ───────────────────────────────────────────────────── -->
+            <template if:true={hasData}>
+                <div
+                    class="chart-wrapper"
+                    role="img"
+                    aria-label="Bar chart showing number of cases by status">
+
+                    <!-- Bars area (grows upward from baseline) -->
+                    <div class="chart-area">
+                        <template for:each={chartBars} for:item="bar">
+                            <div key={bar.label} class="bar-column">
+                                <span class="bar-count" aria-hidden="true">{bar.count}</span>
+                                <div class={bar.barClass} style={bar.barStyle}></div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Status labels row (below the baseline) -->
+                    <div class="chart-labels" aria-hidden="true">
+                        <template for:each={chartBars} for:item="bar">
+                            <span key={bar.label} class={bar.labelClass}>{bar.label}</span>
+                        </template>
+                    </div>
+
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

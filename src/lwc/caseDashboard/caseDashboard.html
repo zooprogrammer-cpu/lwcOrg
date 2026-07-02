@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title="Case Dashboard" icon-name="standard:case">
+        <div class="slds-p-around_medium">
+
+            <!-- ── Case Status picklist ───────────────────────────────────────── -->
+            <lightning-combobox
+                name="caseStatus"
+                label="Case Status"
+                value={selectedStatus}
+                placeholder="Select a Status"
+                options={statusOptions}
+                onchange={handleStatusChange}
+                class="slds-m-bottom_large">
+            </lightning-combobox>
+
+            <!-- ── Child bar chart — reactively highlights the selected status ─ -->
+            <c-case-chart status-filter={selectedStatus}></c-case-chart>
+
+            <!-- ── Child data table — receives the selected status as a prop ─── -->
+            <c-case-data-table status-filter={selectedStatus}></c-case-data-table>
+
+        </div>
+    </lightning-card>
+</template>

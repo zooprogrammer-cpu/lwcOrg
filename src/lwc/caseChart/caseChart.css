@@ -1,0 +1,101 @@
+/* ── Summary pill ──────────────────────────────────────────────────────────── */
+.summary-row {
+    display: flex;
+    align-items: center;
+}
+
+.summary-pill {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--slds-g-color-brand-base-95, #eaf5fe);
+    color: var(--slds-g-color-brand-base-30, #014486);
+    border-radius: 2rem;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ── Chart wrapper ─────────────────────────────────────────────────────────── */
+.chart-wrapper {
+    overflow-x: auto;   /* allows horizontal scroll on small screens */
+}
+
+/* ── Bars area ─────────────────────────────────────────────────────────────── */
+/*
+ * align-items: flex-end  → bar columns touch the bottom (baseline).
+ * Each column is a flex column whose bar grows upward from the baseline.
+ */
+.chart-area {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.25rem;
+    height: 200px;                                              /* fixed canvas height */
+    border-bottom: 2px solid var(--slds-g-color-neutral-base-80, #dddbda);
+    padding-bottom: 0;
+    min-width: fit-content;
+}
+
+/* ── Individual bar column ─────────────────────────────────────────────────── */
+.bar-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;   /* count label sits directly above bar */
+    flex: 1;
+    min-width: 52px;
+}
+
+/* ── Count label (above each bar) ─────────────────────────────────────────── */
+.bar-count {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--slds-g-color-neutral-base-10, #181818);
+    margin-bottom: 4px;
+    line-height: 1;
+}
+
+/* ── Bar itself ────────────────────────────────────────────────────────────── */
+.bar {
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    min-height: 4px;
+    transition: height 0.4s ease, opacity 0.3s ease, background-color 0.3s ease;
+}
+
+/* Active bar — matches the selected status (or all when "All" is chosen) */
+.bar--active {
+    background-color: var(--slds-g-color-brand-base-50, #0176d3);
+}
+
+/* Muted bar — not matching the selected status */
+.bar--muted {
+    background-color: var(--slds-g-color-neutral-base-50, #aeaeae);
+    opacity: 0.35;
+}
+
+/* ── Status labels row (below the baseline) ────────────────────────────────── */
+.chart-labels {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 6px;
+    min-width: fit-content;
+}
+
+.bar-status-label {
+    flex: 1;
+    min-width: 52px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--slds-g-color-neutral-base-40, #5e5e5e);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.25s ease, font-weight 0.25s ease;
+}
+
+/* Highlight the label of the active status */
+.bar-status-label--active {
+    color: var(--slds-g-color-brand-base-30, #014486);
+    font-weight: 700;
+}

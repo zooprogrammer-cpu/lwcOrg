@@ -1,0 +1,53 @@
+<template>
+
+    <!-- Loading state -->
+    <template lwc:if={isLoading}>
+        <div class="slds-p-around_medium slds-align_absolute-center">
+            <lightning-spinner
+                alternative-text="Loading cases…"
+                size="small">
+            </lightning-spinner>
+        </div>
+    </template>
+
+    <!-- Error state -->
+    <template lwc:if={hasError}>
+        <div class="slds-box slds-theme_shade slds-p-around_medium slds-m-top_small">
+            <p class="slds-text-color_error">
+                <lightning-icon
+                    icon-name="utility:error"
+                    size="x-small"
+                    variant="error"
+                    class="slds-m-right_x-small">
+                </lightning-icon>
+                {errorMessage}
+            </p>
+        </div>
+    </template>
+
+    <!-- Data table — rendered only when cases have loaded -->
+    <template lwc:if={hasCases}>
+        <lightning-datatable
+            key-field="Id"
+            data={cases}
+            columns={columns}
+            hide-checkbox-column
+            resize-column-disabled>
+        </lightning-datatable>
+    </template>
+
+    <!-- Empty state -->
+    <template lwc:if={isEmpty}>
+        <div class="slds-illustration slds-illustration_small slds-p-around_medium slds-align_absolute-center">
+            <lightning-icon
+                icon-name="utility:search"
+                size="medium"
+                class="slds-m-bottom_small">
+            </lightning-icon>
+            <p class="slds-text-color_weak slds-m-top_small">
+                No cases found for the selected status.
+            </p>
+        </div>
+    </template>
+
+</template>
